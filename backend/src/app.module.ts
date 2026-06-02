@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { GameModule } from './game/game.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { TeamModule } from './team/team.module';
+import { MatchModule } from './match/match.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TeamModule } from './team/team.module';
     GameModule,
     TournamentModule,
     TeamModule,
+    MatchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
