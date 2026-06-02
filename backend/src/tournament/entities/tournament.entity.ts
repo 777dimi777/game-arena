@@ -1,5 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
 import { Game } from '../../game/entities/game.entity';
+import { Team } from '../../team/entities/team.entity';
 
 @Entity()
 export class Tournament {
@@ -26,4 +35,8 @@ export class Tournament {
 
   @ManyToOne(() => Game, { eager: true })
   game!: Game;
+
+  @ManyToMany(() => Team, { eager: true })
+  @JoinTable()
+  teams!: Team[];
 }

@@ -5,9 +5,10 @@ import { TournamentService } from './tournament.service';
 import { TournamentController } from './tournament.controller';
 import { Tournament } from './entities/tournament.entity';
 import { Game } from '../game/entities/game.entity';
+import { Team } from '../team/entities/team.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tournament, Game])],
+  imports: [TypeOrmModule.forFeature([Tournament, Game, Team])],
   controllers: [TournamentController],
   providers: [TournamentService],
 })

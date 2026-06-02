@@ -6,6 +6,7 @@ import { CreateTournamentDto } from './dto/create-tournament.dto';
 import { UpdateTournamentDto } from './dto/update-tournament.dto';
 import { Tournament } from './entities/tournament.entity';
 import { Game } from '../game/entities/game.entity';
+import { Team } from '../team/entities/team.entity';
 
 @Injectable()
 export class TournamentService {
@@ -15,6 +16,9 @@ export class TournamentService {
 
     @InjectRepository(Game)
     private readonly gameRepository: Repository<Game>,
+
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
   ) {}
 
   async create(createTournamentDto: CreateTournamentDto) {
@@ -34,6 +38,7 @@ export class TournamentService {
       prizePool: createTournamentDto.prizePool,
       status: createTournamentDto.status ?? 'OPEN',
       game: game,
+      teams: [],
     });
 
     return this.tournamentRepository.save(tournament);
@@ -78,6 +83,30 @@ export class TournamentService {
       prizePool: updateTournamentDto.prizePool ?? tournament.prizePool,
       status: updateTournamentDto.status ?? tournament.status,
     });
+
+    return this.tournamentRepository.save(tournament);
+  }
+
+  async addTeam(tournamentId: number, teamId: number) {
+    const tournament = await this.findOne(tournamentId);
+
+    const team = await this.teamRepository.findOne({
+      where: { id: teamId },
+    });
+
+    if (!team) {
+      throw new NotFoundException('Team not found');
+    }
+
+    if (!tournament.teams) {
+      tournament.teams = [];
+    }
+
+    const alreadyJoined = tournament.teams.some((t) => t.id === team.id);
+
+    if (!alreadyJoined) {
+      tournament.teams.push(team);
+    }
 
     return this.tournamentRepository.save(tournament);
   }
