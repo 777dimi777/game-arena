@@ -139,7 +139,22 @@ export class MatchService {
 
     return this.matchRepository.save(match);
   }
+  async updateResult(id: number, scoreA: number, scoreB: number) {
+  const match = await this.findOne(id);
 
+  match.scoreA = scoreA;
+  match.scoreB = scoreB;
+
+  if (scoreA > scoreB) {
+    match.winner = match.teamA;
+  } else if (scoreB > scoreA) {
+    match.winner = match.teamB;
+  } else {
+    match.winner = undefined;
+  }
+
+  return this.matchRepository.save(match);
+}
   async remove(id: number) {
     const match = await this.findOne(id);
     return this.matchRepository.remove(match);
