@@ -11,7 +11,7 @@ export class TeamController {
   create(@Body() createTeamDto: CreateTeamDto) {
     return this.teamService.create(createTeamDto);
   }
-
+  
   @Get()
   findAll() {
     return this.teamService.findAll();

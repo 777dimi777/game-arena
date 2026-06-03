@@ -20,7 +20,10 @@ export class TournamentController {
   create(@Body() createTournamentDto: CreateTournamentDto) {
     return this.tournamentService.create(createTournamentDto);
   }
-
+  @Get(':id/leaderboard')
+getLeaderboard(@Param('id') id: string) {
+  return this.tournamentService.getLeaderboard(+id);
+}
   @Get()
   findAll() {
     return this.tournamentService.findAll();

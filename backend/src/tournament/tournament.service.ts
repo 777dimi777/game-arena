@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { Match } from '../match/entities/match.entity';
 import { CreateTournamentDto } from './dto/create-tournament.dto';
 import { UpdateTournamentDto } from './dto/update-tournament.dto';
 import { Tournament } from './entities/tournament.entity';
@@ -19,6 +19,8 @@ export class TournamentService {
 
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @InjectRepository(Match)
+    private readonly matchRepository: Repository<Match>,
   ) {}
 
   async create(createTournamentDto: CreateTournamentDto) {
@@ -110,7 +112,40 @@ export class TournamentService {
 
     return this.tournamentRepository.save(tournament);
   }
+  async getLeaderboard(tournamentId: number) {
+  const tournament = await this.findOne(tournamentId);
 
+  const leaderboard = tournament.teams.map((team) => {
+    return {
+      teamId: team.id,
+      teamName: team.name,
+      tag: team.tag,
+      wins: 0,
+    };
+  });
+
+  const matches = await this.matchRepository.find({
+    where: {
+      tournament: {
+        id: tournamentId,
+      },
+    },
+  });
+
+  matches.forEach((match) => {
+    if (match.winner) {
+      const item = leaderboard.find((x) => x.teamId === match.winner?.id);
+
+      if (item) {
+        item.wins++;
+      }
+    }
+  });
+
+  leaderboard.sort((a, b) => b.wins - a.wins);
+
+  return leaderboard;
+}
   async remove(id: number) {
     const tournament = await this.findOne(id);
     return this.tournamentRepository.remove(tournament);
