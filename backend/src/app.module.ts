@@ -7,6 +7,7 @@ import { GameModule } from './game/game.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { TeamModule } from './team/team.module';
 import { MatchModule } from './match/match.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MatchModule } from './match/match.module';
     TournamentModule,
     TeamModule,
     MatchModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
