@@ -9,6 +9,7 @@ import { TeamModule } from './team/team.module';
 import { MatchModule } from './match/match.module';
 import { SeedModule } from './seed/seed.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     MatchModule,
     SeedModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
