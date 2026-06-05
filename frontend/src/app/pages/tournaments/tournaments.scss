@@ -1,0 +1,102 @@
+.page {
+  min-height: calc(100vh - 70px);
+  padding: 60px 80px;
+  background: #0f172a;
+  color: white;
+}
+
+.page-header {
+  max-width: 760px;
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+h1 {
+  font-size: 46px;
+  margin: 12px 0;
+}
+
+.page-header p {
+  color: #cbd5e1;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.tournament-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+.tournament-card {
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.game-badge {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.2);
+  color: #93c5fd;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.tournament-card h2 {
+  margin: 18px 0 10px;
+  font-size: 26px;
+}
+
+.tournament-card p {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.info {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.info span {
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 12px;
+  color: #e5e7eb;
+}
+
+button {
+  width: 100%;
+  border: none;
+  padding: 13px 18px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 1000px) {
+  .tournament-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page {
+    padding: 40px 24px;
+  }
+}
