@@ -6,21 +6,12 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { Home } from './pages/home/home';
 import { Tournaments } from './pages/tournaments/tournaments';
+import { TournamentCard } from './components/tournament-card/tournament-card';
 
 @NgModule({
-  declarations: [
-    App,
-    Home,
-    Tournaments
-  ],
-  imports: [
-  BrowserModule,
-  CommonModule,
-  AppRoutingModule
-],
-  providers: [
-    provideHttpClient()
-  ],
-  bootstrap: [App]
+  declarations: [App, Home, Tournaments, TournamentCard],
+  imports: [BrowserModule, CommonModule, AppRoutingModule],
+  providers: [provideHttpClient()],
+  bootstrap: [App],
 })
 export class AppModule {}

@@ -2,38 +2,15 @@
   <div class="page-header">
     <p class="eyebrow">Available tournaments</p>
     <h1>Choose your next challenge</h1>
-    <p>
-      Browse open gaming tournaments, check prize pools and join with your team.
-    </p>
+    <p>Browse open gaming tournaments, check prize pools and join with your team.</p>
   </div>
 
   <div class="tournament-grid">
-    <article
-      class="tournament-card"
+    <app-tournament-card
       *ngFor="let tournament of tournaments$ | async"
-    >
-      <div class="game-badge">
-        {{ tournament.game.name }}
-      </div>
-
-      <h2>{{ tournament.name }}</h2>
-
-      <p>{{ tournament.description }}</p>
-
-      <div class="info">
-        <span>Prize: {{ tournament.prizePool }}€</span>
-
-        <span>
-          Teams: {{ tournament.teams.length }}/{{ tournament.maxTeams }}
-        </span>
-
-        <span>Status: {{ tournament.status }}</span>
-
-        <span>Starts: {{ tournament.startDate }}</span>
-      </div>
-
-      <button>View details</button>
-    </article>
+      [tournament]="tournament"
+      (selected)="onTournamentSelected($event)"
+    ></app-tournament-card>
   </div>
 
   <p class="empty-message" *ngIf="(tournaments$ | async)?.length === 0">

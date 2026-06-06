@@ -1,0 +1,25 @@
+<article class="tournament-card">
+  <div class="game-badge">
+    {{ tournament.game.name }}
+  </div>
+
+  <h2>{{ tournament.name }}</h2>
+
+  <p>{{ tournament.description }}</p>
+
+  <div class="info">
+    <span>Prize: {{ tournament.prizePool }}€</span>
+
+    <span>
+      Teams: {{ tournament.teams.length }}/{{ tournament.maxTeams }}
+    </span>
+
+    <span>Status: {{ tournament.status }}</span>
+
+    <span>Starts: {{ tournament.startDate }}</span>
+  </div>
+
+  <button type="button" (click)="onViewDetails()">
+    View details
+  </button>
+</article>

@@ -18,4 +18,8 @@ export class Tournaments implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onTournamentSelected(tournamentId: number): void {
+    console.log('Selected tournament id:', tournamentId);
+  }
 }

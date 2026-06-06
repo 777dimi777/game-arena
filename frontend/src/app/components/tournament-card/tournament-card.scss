@@ -1,0 +1,59 @@
+.tournament-card {
+  height: 100%;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.game-badge {
+  align-self: flex-start;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.2);
+  color: #93c5fd;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+h2 {
+  margin: 18px 0 10px;
+  font-size: 26px;
+}
+
+p {
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.info {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.info span {
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 12px;
+  color: #e5e7eb;
+}
+
+button {
+  margin-top: auto;
+  width: 100%;
+  border: none;
+  padding: 13px 18px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
