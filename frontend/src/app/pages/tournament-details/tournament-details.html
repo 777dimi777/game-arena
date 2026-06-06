@@ -1,0 +1,53 @@
+<section class="details-page" *ngIf="tournament$ | async as tournament">
+  <a routerLink="/tournaments" class="back-link">← Back to tournaments</a>
+
+  <div class="details-header">
+    <div>
+      <span class="game-badge">{{ tournament.game.name }}</span>
+      <h1>{{ tournament.name }}</h1>
+      <p>{{ tournament.description }}</p>
+    </div>
+
+    <div class="status">{{ tournament.status }}</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span>Prize pool</span>
+      <strong>{{ tournament.prizePool }}€</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Teams</span>
+      <strong>{{ tournament.teams.length }}/{{ tournament.maxTeams }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Start date</span>
+      <strong>{{ tournament.startDate }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Team size</span>
+      <strong>{{ tournament.game.teamSize }}</strong>
+    </div>
+  </div>
+
+  <section class="teams-section">
+    <h2>Registered teams</h2>
+
+    <div class="team-list" *ngIf="tournament.teams.length > 0; else noTeams">
+      <div class="team-card" *ngFor="let team of tournament.teams">
+        <strong>{{ team.name }}</strong>
+        <span>{{ team.tag }}</span>
+        <p>{{ team.description }}</p>
+      </div>
+    </div>
+
+    <ng-template #noTeams>
+      <p class="empty-message">No teams have joined this tournament yet.</p>
+    </ng-template>
+  </section>
+
+  <button type="button" class="join-button">Join tournament</button>
+</section>
