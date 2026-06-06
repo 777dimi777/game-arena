@@ -113,39 +113,39 @@ export class TournamentService {
     return this.tournamentRepository.save(tournament);
   }
   async getLeaderboard(tournamentId: number) {
-  const tournament = await this.findOne(tournamentId);
+    const tournament = await this.findOne(tournamentId);
 
-  const leaderboard = tournament.teams.map((team) => {
-    return {
-      teamId: team.id,
-      teamName: team.name,
-      tag: team.tag,
-      wins: 0,
-    };
-  });
+    const leaderboard = tournament.teams.map((team) => {
+      return {
+        teamId: team.id,
+        teamName: team.name,
+        tag: team.tag,
+        wins: 0,
+      };
+    });
 
-  const matches = await this.matchRepository.find({
-    where: {
-      tournament: {
-        id: tournamentId,
+    const matches = await this.matchRepository.find({
+      where: {
+        tournament: {
+          id: tournamentId,
+        },
       },
-    },
-  });
+    });
 
-  matches.forEach((match) => {
-    if (match.winner) {
-      const item = leaderboard.find((x) => x.teamId === match.winner?.id);
+    matches.forEach((match) => {
+      if (match.winner) {
+        const item = leaderboard.find((x) => x.teamId === match.winner?.id);
 
-      if (item) {
-        item.wins++;
+        if (item) {
+          item.wins++;
+        }
       }
-    }
-  });
+    });
 
-  leaderboard.sort((a, b) => b.wins - a.wins);
+    leaderboard.sort((a, b) => b.wins - a.wins);
 
-  return leaderboard;
-}
+    return leaderboard;
+  }
   async remove(id: number) {
     const tournament = await this.findOne(id);
     return this.tournamentRepository.remove(tournament);

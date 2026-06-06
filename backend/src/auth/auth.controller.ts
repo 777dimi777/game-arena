@@ -30,12 +30,12 @@ export class AuthController {
     };
   }
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles('ADMIN')
-@Get('admin-test')
-adminTest(@Req() req: any) {
-  return {
-    message: 'Admin route works',
-    user: req.user,
-  };
-}
+  @Roles('ADMIN')
+  @Get('admin-test')
+  adminTest(@Req() req: any) {
+    return {
+      message: 'Admin route works',
+      user: req.user,
+    };
+  }
 }
