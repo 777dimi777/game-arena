@@ -4,7 +4,7 @@ import { Teams } from './pages/teams/teams';
 import { Home } from './pages/home/home';
 import { Tournaments } from './pages/tournaments/tournaments';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
-
+import { Games } from './pages/games/games';
 const routes: Routes = [
   {
     path: '',
@@ -22,6 +22,10 @@ const routes: Routes = [
   {
   path: 'teams',
   component: Teams,
+},
+{
+  path: 'games',
+  component: Games,
 },
 ];
 

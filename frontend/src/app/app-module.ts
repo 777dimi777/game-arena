@@ -9,8 +9,9 @@ import { Tournaments } from './pages/tournaments/tournaments';
 import { TournamentCard } from './components/tournament-card/tournament-card';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Teams } from './pages/teams/teams';
+import { Games } from './pages/games/games';
 @NgModule({
-  declarations: [App, Home, Tournaments, TournamentCard, TournamentDetails, Teams],
+  declarations: [App, Home, Tournaments, TournamentCard, TournamentDetails, Teams, Games],
   imports: [BrowserModule, CommonModule, AppRoutingModule],
   providers: [provideHttpClient()],
   bootstrap: [App],

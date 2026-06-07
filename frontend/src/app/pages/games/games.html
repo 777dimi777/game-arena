@@ -1,0 +1,32 @@
+<section class="page">
+  <div class="page-header">
+    <p class="eyebrow">Supported games</p>
+    <h1>Compete in your favorite games</h1>
+    <p>
+      Explore all games available on GameArena and discover tournaments for each title.
+    </p>
+  </div>
+
+  <div class="game-grid">
+    <article class="game-card" *ngFor="let game of games$ | async">
+      <div class="game-icon">
+        {{ game.name.charAt(0) }}
+      </div>
+
+      <h2>{{ game.name }}</h2>
+
+      <div class="meta">
+        <span>{{ game.genre }}</span>
+        <span>Team size: {{ game.teamSize }}</span>
+      </div>
+
+      <p>
+        Join tournaments and compete with other players in {{ game.name }}.
+      </p>
+    </article>
+  </div>
+
+  <p class="empty-message" *ngIf="(games$ | async)?.length === 0">
+    No games are currently available.
+  </p>
+</section>
