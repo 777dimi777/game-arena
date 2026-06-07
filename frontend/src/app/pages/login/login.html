@@ -1,0 +1,48 @@
+<section class="login-page">
+  <div class="login-card">
+    <p class="eyebrow">Welcome back</p>
+
+    <h1>Login to GameArena</h1>
+
+    <p class="subtitle">
+      Access your teams, tournaments and match activity.
+    </p>
+
+    <form (ngSubmit)="onSubmit()">
+      <label for="email">Email</label>
+
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="player@example.com"
+        required
+      />
+
+      <label for="password">Password</label>
+
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Enter your password"
+        required
+      />
+
+      <p class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+
+    <p class="register-link">
+      Don't have an account?
+      <a routerLink="/register">Create account</a>
+    </p>
+  </div>
+</section>

@@ -10,9 +10,11 @@ import { TournamentCard } from './components/tournament-card/tournament-card';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Teams } from './pages/teams/teams';
 import { Games } from './pages/games/games';
+import { FormsModule } from '@angular/forms';
+import { Login } from './pages/login/login';
 @NgModule({
-  declarations: [App, Home, Tournaments, TournamentCard, TournamentDetails, Teams, Games],
-  imports: [BrowserModule, CommonModule, AppRoutingModule],
+  declarations: [App, Home, Tournaments, TournamentCard, TournamentDetails, Teams, Games, Login],
+  imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
   providers: [provideHttpClient()],
   bootstrap: [App],
 })

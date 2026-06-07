@@ -5,6 +5,7 @@ import { Home } from './pages/home/home';
 import { Tournaments } from './pages/tournaments/tournaments';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Games } from './pages/games/games';
+import { Login } from './pages/login/login';
 const routes: Routes = [
   {
     path: '',
@@ -20,12 +21,16 @@ const routes: Routes = [
     component: TournamentDetails,
   },
   {
-  path: 'teams',
-  component: Teams,
-},
-{
-  path: 'games',
-  component: Games,
+    path: 'teams',
+    component: Teams,
+  },
+  {
+    path: 'games',
+    component: Games,
+  },
+  {
+  path: 'login',
+  component: Login,
 },
 ];
 
