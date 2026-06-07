@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { Teams } from './pages/teams/teams';
 import { Home } from './pages/home/home';
 import { Tournaments } from './pages/tournaments/tournaments';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'tournaments/:id',
     component: TournamentDetails,
   },
+  {
+  path: 'teams',
+  component: Teams,
+},
 ];
 
 @NgModule({

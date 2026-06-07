@@ -1,0 +1,29 @@
+<section class="page">
+  <div class="page-header">
+    <p class="eyebrow">Registered teams</p>
+    <h1>Meet the competitors</h1>
+    <p>
+      Discover teams participating in GameArena tournaments.
+    </p>
+  </div>
+
+  <div class="team-grid">
+    <article class="team-card" *ngFor="let team of teams$ | async">
+      <div class="team-logo">
+        {{ team.tag }}
+      </div>
+
+      <h2>{{ team.name }}</h2>
+
+      <span class="tag">#{{ team.tag }}</span>
+
+      <p>
+        {{ team.description || 'This team has no description yet.' }}
+      </p>
+    </article>
+  </div>
+
+  <p class="empty-message" *ngIf="(teams$ | async)?.length === 0">
+    No teams are currently available.
+  </p>
+</section>
