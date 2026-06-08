@@ -32,7 +32,9 @@
       <span class="username">
         {{ getCurrentUser()?.username }}
       </span>
-
+<a routerLink="/profile" routerLinkActive="active">
+  Profile
+</a>
       <button type="button" class="logout-button" (click)="logout()">
         Logout
       </button>

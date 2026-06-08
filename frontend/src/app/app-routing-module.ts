@@ -7,6 +7,8 @@ import { TournamentDetails } from './pages/tournament-details/tournament-details
 import { Games } from './pages/games/games';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
+import { Profile } from './pages/profile/profile';
+import { authGuard } from './guards/auth-guard';
 const routes: Routes = [
   {
     path: '',
@@ -36,6 +38,11 @@ const routes: Routes = [
   {
   path: 'register',
   component: Register,
+},
+{
+  path: 'profile',
+  component: Profile,
+  canActivate: [authGuard],
 },
 ];
 
