@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Profile } from './pages/profile/profile';
+import { Admin } from './pages/admin/admin';
 @NgModule({
   declarations: [
     App,
@@ -27,6 +28,7 @@ import { Profile } from './pages/profile/profile';
     Login,
     Register,
     Profile,
+    Admin,
   ],
   imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
   providers: [provideHttpClient(withInterceptors([authInterceptor]))],

@@ -6,39 +6,38 @@
       Home
     </a>
 
-    <a routerLink="/tournaments" routerLinkActive="active">
-      Tournaments
-    </a>
+    <a routerLink="/tournaments" routerLinkActive="active"> Tournaments </a>
 
-    <a routerLink="/teams" routerLinkActive="active">
-      Teams
-    </a>
+    <a routerLink="/teams" routerLinkActive="active"> Teams </a>
 
-    <a routerLink="/games" routerLinkActive="active">
-      Games
-    </a>
+    <a routerLink="/games" routerLinkActive="active"> Games </a>
 
     <ng-container *ngIf="!isLoggedIn()">
-      <a routerLink="/login" routerLinkActive="active">
-        Login
-      </a>
+      <a routerLink="/login" routerLinkActive="active"> Login </a>
 
-      <a routerLink="/register" class="register-button">
-        Register
-      </a>
+      <a routerLink="/register" class="register-button"> Register </a>
     </ng-container>
-
     <ng-container *ngIf="isLoggedIn()">
-      <span class="username">
-        {{ getCurrentUser()?.username }}
-      </span>
-<a routerLink="/profile" routerLinkActive="active">
-  Profile
-</a>
-      <button type="button" class="logout-button" (click)="logout()">
-        Logout
-      </button>
-    </ng-container>
+  <a routerLink="/profile" routerLinkActive="active">
+    Profile
+  </a>
+
+  <a
+    *ngIf="getCurrentUser()?.role === 'ADMIN'"
+    routerLink="/admin"
+    routerLinkActive="active"
+  >
+    Admin
+  </a>
+
+  <span class="username">
+    {{ getCurrentUser()?.username }}
+  </span>
+
+  <button type="button" class="logout-button" (click)="logout()">
+    Logout
+  </button>
+</ng-container>
   </div>
 </nav>
 

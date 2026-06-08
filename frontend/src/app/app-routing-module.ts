@@ -9,6 +9,8 @@ import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Profile } from './pages/profile/profile';
 import { authGuard } from './guards/auth-guard';
+import { Admin } from './pages/admin/admin';
+import { adminGuard } from './guards/admin-guard';
 const routes: Routes = [
   {
     path: '',
@@ -36,14 +38,19 @@ const routes: Routes = [
     component: Login,
   },
   {
-  path: 'register',
-  component: Register,
-},
-{
-  path: 'profile',
-  component: Profile,
-  canActivate: [authGuard],
-},
+    path: 'register',
+    component: Register,
+  },
+  {
+    path: 'profile',
+    component: Profile,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    component: Admin,
+    canActivate: [adminGuard],
+  },
 ];
 
 @NgModule({
