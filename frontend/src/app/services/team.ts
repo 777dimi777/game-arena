@@ -19,4 +19,13 @@ export class TeamService {
   getById(id: number): Observable<Team> {
     return this.http.get<Team>(`${this.apiUrl}/${id}`);
   }
+  create(data: CreateTeamData): Observable<Team> {
+  return this.http.post<Team>(this.apiUrl, data);
+}
+}
+export interface CreateTeamData {
+  name: string;
+  tag: string;
+  logoUrl?: string;
+  description?: string;
 }
