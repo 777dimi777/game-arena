@@ -12,7 +12,12 @@ export interface LoginResponse {
     role: string;
   };
 }
-
+export interface CurrentUser {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -47,16 +52,21 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }
-  register(
-  username: string,
-  email: string,
-  password: string,
-): Observable<RegisterResponse> {
-  return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, {
-    username,
-    email,
-    password,
-  });
+  register(username: string, email: string, password: string): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, {
+      username,
+      email,
+      password,
+    });
+  }
+  getCurrentUser(): CurrentUser | null {
+  const user = localStorage.getItem('currentUser');
+
+  if (!user) {
+    return null;
+  }
+
+  return JSON.parse(user) as CurrentUser;
 }
 }
 export interface RegisterResponse {
@@ -68,3 +78,4 @@ export interface RegisterResponse {
     role: string;
   };
 }
+

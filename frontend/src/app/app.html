@@ -1,12 +1,42 @@
 <nav class="navbar">
-  <div class="logo">GameArena</div>
+  <a routerLink="/" class="logo">GameArena</a>
 
   <div class="nav-links">
-    <a routerLink="/">Home</a>
-    <a routerLink="/tournaments">Tournaments</a>
-    <a routerLink="/teams">Teams</a>
-    <a routerLink="/games">Games</a>
-    <a routerLink="/login">Login</a>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Home
+    </a>
+
+    <a routerLink="/tournaments" routerLinkActive="active">
+      Tournaments
+    </a>
+
+    <a routerLink="/teams" routerLinkActive="active">
+      Teams
+    </a>
+
+    <a routerLink="/games" routerLinkActive="active">
+      Games
+    </a>
+
+    <ng-container *ngIf="!isLoggedIn()">
+      <a routerLink="/login" routerLinkActive="active">
+        Login
+      </a>
+
+      <a routerLink="/register" class="register-button">
+        Register
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn()">
+      <span class="username">
+        {{ getCurrentUser()?.username }}
+      </span>
+
+      <button type="button" class="logout-button" (click)="logout()">
+        Logout
+      </button>
+    </ng-container>
   </div>
 </nav>
 
