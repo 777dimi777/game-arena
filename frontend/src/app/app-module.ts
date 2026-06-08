@@ -12,8 +12,19 @@ import { Teams } from './pages/teams/teams';
 import { Games } from './pages/games/games';
 import { FormsModule } from '@angular/forms';
 import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
 @NgModule({
-  declarations: [App, Home, Tournaments, TournamentCard, TournamentDetails, Teams, Games, Login],
+  declarations: [
+    App,
+    Home,
+    Tournaments,
+    TournamentCard,
+    TournamentDetails,
+    Teams,
+    Games,
+    Login,
+    Register,
+  ],
   imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
   providers: [provideHttpClient()],
   bootstrap: [App],

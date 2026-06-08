@@ -6,6 +6,7 @@ import { Tournaments } from './pages/tournaments/tournaments';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Games } from './pages/games/games';
 import { Login } from './pages/login/login';
+import { Register } from './pages/register/register';
 const routes: Routes = [
   {
     path: '',
@@ -29,8 +30,12 @@ const routes: Routes = [
     component: Games,
   },
   {
-  path: 'login',
-  component: Login,
+    path: 'login',
+    component: Login,
+  },
+  {
+  path: 'register',
+  component: Register,
 },
 ];
 
