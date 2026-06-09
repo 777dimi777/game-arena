@@ -78,3 +78,31 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.admin-content {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.result-card {
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  padding: 28px;
+}
+
+.result-card h2 {
+  font-size: 30px;
+  margin: 10px 0;
+}
+
+.result-card p {
+  color: #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .admin-content {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,63 @@
+<section class="form-card">
+  <div class="form-header">
+    <p class="eyebrow">Game management</p>
+    <h2>Add a new game</h2>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="gameName">Name</label>
+
+    <input
+      id="gameName"
+      name="gameName"
+      type="text"
+      [(ngModel)]="name"
+      placeholder="Rocket League"
+      required
+    />
+
+    <label for="genre">Genre</label>
+
+    <input
+      id="genre"
+      name="genre"
+      type="text"
+      [(ngModel)]="genre"
+      placeholder="Sports"
+      required
+    />
+
+    <label for="teamSize">Team size</label>
+
+    <input
+      id="teamSize"
+      name="teamSize"
+      type="number"
+      [(ngModel)]="teamSize"
+      min="1"
+      required
+    />
+
+    <label for="imageUrl">Image URL</label>
+
+    <input
+      id="imageUrl"
+      name="imageUrl"
+      type="text"
+      [(ngModel)]="imageUrl"
+      placeholder="rocket-league.jpg"
+    />
+
+    <p class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <p class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </p>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Creating...' : 'Create game' }}
+    </button>
+  </form>
+</section>

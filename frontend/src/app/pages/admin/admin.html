@@ -7,29 +7,20 @@
     </p>
   </div>
 
-  <div class="admin-grid">
-    <article class="admin-card">
-      <h2>Games</h2>
-      <p>Create and manage supported games.</p>
-      <button type="button">Manage games</button>
-    </article>
+  <div class="admin-content">
+    <app-admin-game-form
+      (gameCreated)="onGameCreated($event)"
+    ></app-admin-game-form>
 
-    <article class="admin-card">
-      <h2>Tournaments</h2>
-      <p>Create tournaments and update their status.</p>
-      <button type="button">Manage tournaments</button>
-    </article>
+    <section class="result-card" *ngIf="lastCreatedGame">
+      <p class="eyebrow">Latest created game</p>
 
-    <article class="admin-card">
-      <h2>Matches</h2>
-      <p>Create matches and enter final results.</p>
-      <button type="button">Manage matches</button>
-    </article>
+      <h2>{{ lastCreatedGame.name }}</h2>
 
-    <article class="admin-card">
-      <h2>Teams</h2>
-      <p>Review registered teams and participants.</p>
-      <button type="button">Manage teams</button>
-    </article>
+      <p>
+        {{ lastCreatedGame.genre }} · Team size:
+        {{ lastCreatedGame.teamSize }}
+      </p>
+    </section>
   </div>
 </section>
