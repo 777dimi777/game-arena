@@ -3,7 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Team } from '../models/team';
-
+export interface CreateTeamData {
+  name: string;
+  tag: string;
+  logoUrl?: string;
+  description?: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -22,10 +27,4 @@ export class TeamService {
   create(data: CreateTeamData): Observable<Team> {
   return this.http.post<Team>(this.apiUrl, data);
 }
-}
-export interface CreateTeamData {
-  name: string;
-  tag: string;
-  logoUrl?: string;
-  description?: string;
 }

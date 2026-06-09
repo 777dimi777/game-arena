@@ -1,0 +1,67 @@
+<section class="create-team-page">
+  <div class="form-card">
+    <p class="eyebrow">Team creation</p>
+
+    <h1>Create your team</h1>
+
+    <p class="subtitle">
+      Build your squad and prepare to enter GameArena tournaments.
+    </p>
+
+    <form (ngSubmit)="onSubmit()">
+      <label for="name">Team name</label>
+
+      <input
+        id="name"
+        name="name"
+        type="text"
+        [(ngModel)]="name"
+        placeholder="Balkan Warriors"
+        required
+      />
+
+      <label for="tag">Team tag</label>
+
+      <input
+        id="tag"
+        name="tag"
+        type="text"
+        [(ngModel)]="tag"
+        placeholder="BW"
+        maxlength="8"
+        required
+      />
+
+      <label for="logoUrl">Logo URL</label>
+
+      <input
+        id="logoUrl"
+        name="logoUrl"
+        type="text"
+        [(ngModel)]="logoUrl"
+        placeholder="team-logo.jpg"
+      />
+
+      <label for="description">Description</label>
+
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="description"
+        placeholder="Tell other players something about your team."
+      ></textarea>
+
+      <p class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <p class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+      </p>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create team' }}
+      </button>
+    </form>
+  </div>
+</section>

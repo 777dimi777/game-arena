@@ -86,3 +86,17 @@ h1 {
     padding: 40px 24px;
   }
 }
+.create-team-button {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #7c3aed;
+  color: white;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.create-team-button:hover {
+  background: #6d28d9;
+}

@@ -11,6 +11,7 @@ import { Profile } from './pages/profile/profile';
 import { authGuard } from './guards/auth-guard';
 import { Admin } from './pages/admin/admin';
 import { adminGuard } from './guards/admin-guard';
+import { CreateTeam } from './pages/create-team/create-team';
 const routes: Routes = [
   {
     path: '',
@@ -51,6 +52,11 @@ const routes: Routes = [
     component: Admin,
     canActivate: [adminGuard],
   },
+  {
+  path: 'create-team',
+  component: CreateTeam,
+  canActivate: [authGuard],
+},
 ];
 
 @NgModule({
