@@ -106,3 +106,46 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.admin-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.result-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.result-card {
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  padding: 28px;
+}
+
+.result-label {
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.result-card h2 {
+  margin: 10px 0;
+}
+
+.result-card p {
+  color: #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .admin-content,
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -17,6 +17,7 @@ import { Register } from './pages/register/register';
 import { Profile } from './pages/profile/profile';
 import { Admin } from './pages/admin/admin';
 import { AdminGameForm } from './components/admin-game-form/admin-game-form';
+import { AdminTournamentForm } from './components/admin-tournament-form/admin-tournament-form';
 @NgModule({
   declarations: [
     App,
@@ -31,6 +32,7 @@ import { AdminGameForm } from './components/admin-game-form/admin-game-form';
     Profile,
     Admin,
     AdminGameForm,
+    AdminTournamentForm,
   ],
   imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
   providers: [provideHttpClient(withInterceptors([authInterceptor]))],

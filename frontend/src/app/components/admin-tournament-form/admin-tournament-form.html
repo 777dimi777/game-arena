@@ -1,0 +1,102 @@
+<section class="form-card">
+  <div class="form-header">
+    <p class="eyebrow">Tournament management</p>
+    <h2>Create a tournament</h2>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="tournamentName">Name</label>
+
+    <input
+      id="tournamentName"
+      name="tournamentName"
+      type="text"
+      [(ngModel)]="name"
+      placeholder="Valorant Summer Cup"
+      required
+    />
+
+    <label for="description">Description</label>
+
+    <textarea
+      id="description"
+      name="description"
+      [(ngModel)]="description"
+      placeholder="Tournament description"
+      required
+    ></textarea>
+
+    <label for="startDate">Start date</label>
+
+    <input
+      id="startDate"
+      name="startDate"
+      type="date"
+      [(ngModel)]="startDate"
+      required
+    />
+
+    <label for="maxTeams">Maximum teams</label>
+
+    <input
+      id="maxTeams"
+      name="maxTeams"
+      type="number"
+      [(ngModel)]="maxTeams"
+      min="2"
+      required
+    />
+
+    <label for="prizePool">Prize pool</label>
+
+    <input
+      id="prizePool"
+      name="prizePool"
+      type="number"
+      [(ngModel)]="prizePool"
+      min="0"
+      required
+    />
+
+    <label for="status">Status</label>
+
+    <select
+      id="status"
+      name="status"
+      [(ngModel)]="status"
+    >
+      <option value="OPEN">OPEN</option>
+      <option value="CLOSED">CLOSED</option>
+      <option value="ACTIVE">ACTIVE</option>
+      <option value="FINISHED">FINISHED</option>
+    </select>
+
+    <label for="gameId">Game</label>
+
+    <select
+      id="gameId"
+      name="gameId"
+      [(ngModel)]="gameId"
+      required
+    >
+      <option
+        *ngFor="let game of games"
+        [ngValue]="game.id"
+      >
+        {{ game.name }}
+      </option>
+    </select>
+
+    <p class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <p class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </p>
+
+    <button type="submit" [disabled]="loading || games.length === 0">
+      {{ loading ? 'Creating...' : 'Create tournament' }}
+    </button>
+  </form>
+</section>

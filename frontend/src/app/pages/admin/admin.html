@@ -12,14 +12,27 @@
       (gameCreated)="onGameCreated($event)"
     ></app-admin-game-form>
 
+    <app-admin-tournament-form
+      (tournamentCreated)="onTournamentCreated($event)"
+    ></app-admin-tournament-form>
+  </div>
+
+  <div class="result-grid">
     <section class="result-card" *ngIf="lastCreatedGame">
-      <p class="eyebrow">Latest created game</p>
-
+      <p class="result-label">Latest created game</p>
       <h2>{{ lastCreatedGame.name }}</h2>
-
       <p>
         {{ lastCreatedGame.genre }} · Team size:
         {{ lastCreatedGame.teamSize }}
+      </p>
+    </section>
+
+    <section class="result-card" *ngIf="lastCreatedTournament">
+      <p class="result-label">Latest created tournament</p>
+      <h2>{{ lastCreatedTournament.name }}</h2>
+      <p>
+        {{ lastCreatedTournament.game.name }} ·
+        {{ lastCreatedTournament.prizePool }}€
       </p>
     </section>
   </div>
