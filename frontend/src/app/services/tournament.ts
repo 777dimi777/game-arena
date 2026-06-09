@@ -28,6 +28,9 @@ export class TournamentService {
     return this.http.get<Tournament>(`${this.apiUrl}/${id}`);
   }
   create(data: CreateTournamentData): Observable<Tournament> {
-  return this.http.post<Tournament>(this.apiUrl, data);
-}
+    return this.http.post<Tournament>(this.apiUrl, data);
+  }
+  joinTournament(tournamentId: number, teamId: number): Observable<Tournament> {
+    return this.http.post<Tournament>(`${this.apiUrl}/${tournamentId}/join/${teamId}`, {});
+  }
 }

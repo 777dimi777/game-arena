@@ -19,6 +19,7 @@ import { Admin } from './pages/admin/admin';
 import { AdminGameForm } from './components/admin-game-form/admin-game-form';
 import { AdminTournamentForm } from './components/admin-tournament-form/admin-tournament-form';
 import { CreateTeam } from './pages/create-team/create-team';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     App,
