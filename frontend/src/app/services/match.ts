@@ -14,6 +14,12 @@ export interface CreateMatchData {
 })
 export class MatchService {
   private readonly apiUrl = 'http://localhost:3000/match';
+  updateResult(matchId: number, scoreA: number, scoreB: number): Observable<Match> {
+    return this.http.patch<Match>(`${this.apiUrl}/${matchId}/result`, {
+      scoreA,
+      scoreB,
+    });
+  }
 
   constructor(private readonly http: HttpClient) {}
 
@@ -25,6 +31,6 @@ export class MatchService {
     return this.http.get<Match>(`${this.apiUrl}/${id}`);
   }
   create(data: CreateMatchData): Observable<Match> {
-  return this.http.post<Match>(this.apiUrl, data);
-}
+    return this.http.post<Match>(this.apiUrl, data);
+  }
 }

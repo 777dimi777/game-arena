@@ -13,9 +13,11 @@
     ></app-admin-tournament-form>
 
     <app-admin-match-form (matchCreated)="onMatchCreated($event)"></app-admin-match-form>
-  </div>
-  <app-admin-match-form (matchCreated)="onMatchCreated($event)"></app-admin-match-form>
 
+    <app-admin-match-result-form
+      (resultUpdated)="onResultUpdated($event)"
+    ></app-admin-match-result-form>
+  </div>
   <div class="result-grid">
     <section class="result-card" *ngIf="lastCreatedGame">
       <p class="result-label">Latest created game</p>
@@ -45,6 +47,21 @@
         ·
         {{ lastCreatedMatch.scheduledAt }}
       </p>
+    </section>
+    <section class="result-card" *ngIf="lastUpdatedMatch">
+      <p class="result-label">Latest updated result</p>
+
+      <h2>
+        {{ lastUpdatedMatch.teamA.name }}
+        {{ lastUpdatedMatch.scoreA }}
+        :
+        {{ lastUpdatedMatch.scoreB }}
+        {{ lastUpdatedMatch.teamB.name }}
+      </h2>
+
+      <p *ngIf="lastUpdatedMatch.winner">Winner: {{ lastUpdatedMatch.winner.name }}</p>
+
+      <p *ngIf="!lastUpdatedMatch.winner">Match ended in a draw.</p>
     </section>
   </div>
 </section>

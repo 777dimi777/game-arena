@@ -1,0 +1,82 @@
+<section class="form-card">
+  <div class="form-header">
+    <p class="eyebrow">Result management</p>
+    <h2>Enter match result</h2>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="matchId">Match</label>
+
+    <select
+      id="matchId"
+      name="matchId"
+      [(ngModel)]="matchId"
+      required
+    >
+      <option
+        *ngFor="let match of matches"
+        [ngValue]="match.id"
+      >
+        {{ match.teamA.name }} vs {{ match.teamB.name }}
+        — {{ match.tournament.name }}
+      </option>
+    </select>
+
+    <div class="selected-match" *ngIf="getSelectedMatch() as selectedMatch">
+      <div>
+        <strong>{{ selectedMatch.teamA.name }}</strong>
+        <span>{{ selectedMatch.teamA.tag }}</span>
+      </div>
+
+      <span class="versus">VS</span>
+
+      <div>
+        <strong>{{ selectedMatch.teamB.name }}</strong>
+        <span>{{ selectedMatch.teamB.tag }}</span>
+      </div>
+    </div>
+
+    <div class="score-grid">
+      <div>
+        <label for="scoreA">Team A score</label>
+
+        <input
+          id="scoreA"
+          name="scoreA"
+          type="number"
+          [(ngModel)]="scoreA"
+          min="0"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="scoreB">Team B score</label>
+
+        <input
+          id="scoreB"
+          name="scoreB"
+          type="number"
+          [(ngModel)]="scoreB"
+          min="0"
+          required
+        />
+      </div>
+    </div>
+
+    <p class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <p class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </p>
+
+    <button
+      type="submit"
+      [disabled]="loading || matches.length === 0"
+    >
+      {{ loading ? 'Saving...' : 'Save result' }}
+    </button>
+  </form>
+</section>

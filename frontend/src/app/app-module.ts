@@ -21,6 +21,7 @@ import { AdminTournamentForm } from './components/admin-tournament-form/admin-to
 import { CreateTeam } from './pages/create-team/create-team';
 import { Matches } from './pages/matches/matches';
 import { AdminMatchForm } from './components/admin-match-form/admin-match-form';
+import { AdminMatchResultForm } from './components/admin-match-result-form/admin-match-result-form';
 @NgModule({
   declarations: [
     App,
@@ -39,6 +40,7 @@ import { AdminMatchForm } from './components/admin-match-form/admin-match-form';
     CreateTeam,
     Matches,
     AdminMatchForm,
+    AdminMatchResultForm,
   ],
   imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
   providers: [provideHttpClient(withInterceptors([authInterceptor]))],

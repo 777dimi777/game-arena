@@ -12,11 +12,12 @@ import { Tournament } from '../../models/tournament';
 export class Admin {
   lastCreatedGame?: Game;
   lastCreatedTournament?: Tournament;
-lastCreatedMatch?: Match;
+  lastCreatedMatch?: Match;
+  lastUpdatedMatch?: Match;
 
-onMatchCreated(match: Match): void {
-  this.lastCreatedMatch = match;
-}
+  onMatchCreated(match: Match): void {
+    this.lastCreatedMatch = match;
+  }
   onGameCreated(game: Game): void {
     this.lastCreatedGame = game;
   }
@@ -24,5 +25,8 @@ onMatchCreated(match: Match): void {
   onTournamentCreated(tournament: Tournament): void {
     this.lastCreatedTournament = tournament;
   }
-  
+
+  onResultUpdated(match: Match): void {
+    this.lastUpdatedMatch = match;
+  }
 }
