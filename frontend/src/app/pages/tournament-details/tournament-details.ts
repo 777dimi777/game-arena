@@ -1,12 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, finalize, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  finalize,
+  map,
+  Observable,
+  shareReplay,
+  switchMap,
+  tap,
+} from 'rxjs';
 
+import { LeaderboardItem } from '../../models/leaderboard-item';
 import { Team } from '../../models/team';
 import { Tournament } from '../../models/tournament';
+import { AuthService } from '../../services/auth';
 import { TeamService } from '../../services/team';
 import { TournamentService } from '../../services/tournament';
-import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-tournament-details',
@@ -16,15 +26,17 @@ import { AuthService } from '../../services/auth';
 })
 export class TournamentDetails implements OnInit {
   tournament$!: Observable<Tournament>;
+  leaderboard$!: Observable<LeaderboardItem[]>;
+  teams$!: Observable<Team[]>;
 
   tournamentId = 0;
   selectedTeamId = 0;
 
-  teams: Team[] = [];
-
   loading = false;
   errorMessage = '';
   successMessage = '';
+
+  private readonly refreshSubject = new BehaviorSubject<void>(undefined);
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -34,26 +46,50 @@ export class TournamentDetails implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tournament$ = this.route.paramMap.pipe(
-      switchMap((params) => {
-        this.tournamentId = Number(params.get('id'));
-
-        return this.tournamentService.getById(this.tournamentId);
+    const tournamentId$ = this.route.paramMap.pipe(
+      map((params) => Number(params.get('id'))),
+      tap((id) => {
+        this.tournamentId = id;
+      }),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
       }),
     );
 
-    this.teamService.getAll().subscribe({
-      next: (teams) => {
-        this.teams = teams;
+    this.tournament$ = combineLatest([
+      tournamentId$,
+      this.refreshSubject,
+    ]).pipe(
+      switchMap(([id]) => this.tournamentService.getById(id)),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
+    );
 
-        if (teams.length > 0) {
+    this.leaderboard$ = combineLatest([
+      tournamentId$,
+      this.refreshSubject,
+    ]).pipe(
+      switchMap(([id]) => this.tournamentService.getLeaderboard(id)),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
+    );
+
+    this.teams$ = this.teamService.getAll().pipe(
+      tap((teams) => {
+        if (teams.length > 0 && this.selectedTeamId === 0) {
           this.selectedTeamId = teams[0].id;
         }
-      },
-      error: () => {
-        this.errorMessage = 'Failed to load teams.';
-      },
-    });
+      }),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
+    );
   }
 
   isLoggedIn(): boolean {
@@ -85,17 +121,17 @@ export class TournamentDetails implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.successMessage = 'Team joined the tournament successfully.';
+          this.successMessage =
+            'Team joined the tournament successfully.';
 
-          this.tournament$ =
-            this.tournamentService.getById(this.tournamentId);
+          this.refreshSubject.next();
         },
         error: (error) => {
           const message = error.error?.message;
 
           this.errorMessage = Array.isArray(message)
             ? message.join(', ')
-            : message ?? 'Failed to join tournament.';
+            : (message ?? 'Failed to join tournament.');
         },
       });
   }

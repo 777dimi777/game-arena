@@ -1,4 +1,7 @@
-<section class="details-page" *ngIf="tournament$ | async as tournament">
+<section
+  class="details-page"
+  *ngIf="tournament$ | async as tournament"
+>
   <a routerLink="/tournaments" class="back-link">
     ← Back to tournaments
   </a>
@@ -56,7 +59,9 @@
       >
         <strong>{{ team.name }}</strong>
         <span>{{ team.tag }}</span>
-        <p>{{ team.description }}</p>
+        <p>
+          {{ team.description || 'This team has no description.' }}
+        </p>
       </div>
     </div>
 
@@ -67,12 +72,52 @@
     </ng-template>
   </section>
 
-  <section class="join-card">
+  <section class="leaderboard-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Tournament standings</p>
+        <h2>Leaderboard</h2>
+      </div>
+    </div>
+
+    <ng-container *ngIf="leaderboard$ | async as leaderboard">
+      <div
+        class="leaderboard"
+        *ngIf="leaderboard.length > 0; else noLeaderboard"
+      >
+        <div class="leaderboard-header">
+          <span>Rank</span>
+          <span>Team</span>
+          <span>Tag</span>
+          <span>Wins</span>
+        </div>
+
+        <div
+          class="leaderboard-row"
+          *ngFor="let item of leaderboard; let i = index"
+        >
+          <span class="rank">#{{ i + 1 }}</span>
+          <strong>{{ item.teamName }}</strong>
+          <span>{{ item.tag }}</span>
+          <span class="wins">{{ item.wins }}</span>
+        </div>
+      </div>
+
+      <ng-template #noLeaderboard>
+        <p class="empty-message">
+          No teams are available for the leaderboard yet.
+        </p>
+      </ng-template>
+    </ng-container>
+  </section>
+
+  <section
+    class="join-card"
+    *ngIf="teams$ | async as teams"
+  >
     <h2>Join tournament</h2>
 
-    <p>
-      Select a team and register it for this tournament.
-    </p>
+    <p>Select a team and register it for this tournament.</p>
 
     <select
       [(ngModel)]="selectedTeamId"

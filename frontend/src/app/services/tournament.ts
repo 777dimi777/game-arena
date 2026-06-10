@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { LeaderboardItem } from '../models/leaderboard-item';
 import { Tournament } from '../models/tournament';
 export interface CreateTournamentData {
   name: string;
@@ -33,4 +33,9 @@ export class TournamentService {
   joinTournament(tournamentId: number, teamId: number): Observable<Tournament> {
     return this.http.post<Tournament>(`${this.apiUrl}/${tournamentId}/join/${teamId}`, {});
   }
+  getLeaderboard(tournamentId: number): Observable<LeaderboardItem[]> {
+  return this.http.get<LeaderboardItem[]>(
+    `${this.apiUrl}/${tournamentId}/leaderboard`,
+  );
+}
 }
