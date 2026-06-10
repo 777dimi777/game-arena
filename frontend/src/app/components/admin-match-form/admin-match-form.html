@@ -1,0 +1,85 @@
+<section class="form-card">
+  <div class="form-header">
+    <p class="eyebrow">Match management</p>
+    <h2>Create a match</h2>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="scheduledAt">Scheduled date and time</label>
+
+    <input
+      id="scheduledAt"
+      name="scheduledAt"
+      type="datetime-local"
+      [(ngModel)]="scheduledAt"
+      required
+    />
+
+    <label for="tournamentId">Tournament</label>
+
+    <select
+      id="tournamentId"
+      name="tournamentId"
+      [(ngModel)]="tournamentId"
+      required
+    >
+      <option
+        *ngFor="let tournament of tournaments"
+        [ngValue]="tournament.id"
+      >
+        {{ tournament.name }}
+      </option>
+    </select>
+
+    <label for="teamAId">Team A</label>
+
+    <select
+      id="teamAId"
+      name="teamAId"
+      [(ngModel)]="teamAId"
+      required
+    >
+      <option
+        *ngFor="let team of teams"
+        [ngValue]="team.id"
+      >
+        {{ team.name }} ({{ team.tag }})
+      </option>
+    </select>
+
+    <label for="teamBId">Team B</label>
+
+    <select
+      id="teamBId"
+      name="teamBId"
+      [(ngModel)]="teamBId"
+      required
+    >
+      <option
+        *ngFor="let team of teams"
+        [ngValue]="team.id"
+      >
+        {{ team.name }} ({{ team.tag }})
+      </option>
+    </select>
+
+    <p class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <p class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </p>
+
+    <button
+      type="submit"
+      [disabled]="
+        loading ||
+        tournaments.length === 0 ||
+        teams.length < 2
+      "
+    >
+      {{ loading ? 'Creating...' : 'Create match' }}
+    </button>
+  </form>
+</section>

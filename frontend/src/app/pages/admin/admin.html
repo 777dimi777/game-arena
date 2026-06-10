@@ -2,20 +2,19 @@
   <div class="page-header">
     <p class="eyebrow">Administration</p>
     <h1>GameArena control panel</h1>
-    <p>
-      Manage games, tournaments, teams and match results.
-    </p>
+    <p>Manage games, tournaments, teams and match results.</p>
   </div>
 
   <div class="admin-content">
-    <app-admin-game-form
-      (gameCreated)="onGameCreated($event)"
-    ></app-admin-game-form>
+    <app-admin-game-form (gameCreated)="onGameCreated($event)"></app-admin-game-form>
 
     <app-admin-tournament-form
       (tournamentCreated)="onTournamentCreated($event)"
     ></app-admin-tournament-form>
+
+    <app-admin-match-form (matchCreated)="onMatchCreated($event)"></app-admin-match-form>
   </div>
+  <app-admin-match-form (matchCreated)="onMatchCreated($event)"></app-admin-match-form>
 
   <div class="result-grid">
     <section class="result-card" *ngIf="lastCreatedGame">
@@ -30,9 +29,21 @@
     <section class="result-card" *ngIf="lastCreatedTournament">
       <p class="result-label">Latest created tournament</p>
       <h2>{{ lastCreatedTournament.name }}</h2>
+      <p>{{ lastCreatedTournament.game.name }} · {{ lastCreatedTournament.prizePool }}€</p>
+    </section>
+    <section class="result-card" *ngIf="lastCreatedMatch">
+      <p class="result-label">Latest created match</p>
+
+      <h2>
+        {{ lastCreatedMatch.teamA.name }}
+        vs
+        {{ lastCreatedMatch.teamB.name }}
+      </h2>
+
       <p>
-        {{ lastCreatedTournament.game.name }} ·
-        {{ lastCreatedTournament.prizePool }}€
+        {{ lastCreatedMatch.tournament.name }}
+        ·
+        {{ lastCreatedMatch.scheduledAt }}
       </p>
     </section>
   </div>
