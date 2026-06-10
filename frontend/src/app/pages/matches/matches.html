@@ -1,0 +1,68 @@
+<section class="page" *ngIf="matches$ | async as matches">
+  <div class="page-header">
+    <p class="eyebrow">Match schedule</p>
+    <h1>Upcoming and completed matches</h1>
+    <p>
+      Follow tournament matches, results and winning teams.
+    </p>
+  </div>
+
+  <div class="match-list">
+    <article class="match-card" *ngFor="let match of matches">
+      <div class="match-top">
+        <div>
+          <span class="tournament-name">
+            {{ match.tournament.name }}
+          </span>
+
+          <p class="scheduled">
+            {{ match.scheduledAt }}
+          </p>
+        </div>
+
+        <span class="game-badge">
+          {{ match.tournament.game.name }}
+        </span>
+      </div>
+
+      <div class="teams">
+        <div class="team">
+          <div class="team-logo">
+            {{ match.teamA.tag }}
+          </div>
+
+          <strong>{{ match.teamA.name }}</strong>
+        </div>
+
+        <div class="score">
+          <span>{{ match.scoreA }}</span>
+          <small>:</small>
+          <span>{{ match.scoreB }}</span>
+        </div>
+
+        <div class="team right">
+          <strong>{{ match.teamB.name }}</strong>
+
+          <div class="team-logo">
+            {{ match.teamB.tag }}
+          </div>
+        </div>
+      </div>
+
+      <div class="winner" *ngIf="match.winner; else pendingResult">
+        Winner:
+        <strong>{{ match.winner.name }}</strong>
+      </div>
+
+      <ng-template #pendingResult>
+        <div class="pending">
+          Result pending
+        </div>
+      </ng-template>
+    </article>
+  </div>
+
+  <p class="empty-message" *ngIf="matches.length === 0">
+    No matches are currently available.
+  </p>
+</section>

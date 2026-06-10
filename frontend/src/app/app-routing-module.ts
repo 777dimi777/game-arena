@@ -12,6 +12,7 @@ import { authGuard } from './guards/auth-guard';
 import { Admin } from './pages/admin/admin';
 import { adminGuard } from './guards/admin-guard';
 import { CreateTeam } from './pages/create-team/create-team';
+import { Matches } from './pages/matches/matches';
 const routes: Routes = [
   {
     path: '',
@@ -53,9 +54,13 @@ const routes: Routes = [
     canActivate: [adminGuard],
   },
   {
-  path: 'create-team',
-  component: CreateTeam,
-  canActivate: [authGuard],
+    path: 'create-team',
+    component: CreateTeam,
+    canActivate: [authGuard],
+  },
+  {
+  path: 'matches',
+  component: Matches,
 },
 ];
 
