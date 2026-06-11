@@ -22,6 +22,9 @@ import { CreateTeam } from './pages/create-team/create-team';
 import { Matches } from './pages/matches/matches';
 import { AdminMatchForm } from './components/admin-match-form/admin-match-form';
 import { AdminMatchResultForm } from './components/admin-match-result-form/admin-match-result-form';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 @NgModule({
   declarations: [
     App,
@@ -42,7 +45,17 @@ import { AdminMatchResultForm } from './components/admin-match-result-form/admin
     AdminMatchForm,
     AdminMatchResultForm,
   ],
-  imports: [BrowserModule, CommonModule, AppRoutingModule, FormsModule],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    AppRoutingModule,
+    FormsModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+    }),
+  ],
   providers: [provideHttpClient(withInterceptors([authInterceptor]))],
   bootstrap: [App],
 })
