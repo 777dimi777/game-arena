@@ -1,19 +1,38 @@
 <section class="page">
   <div class="page-header">
-    <p class="eyebrow">Available tournaments</p>
-    <h1>Choose your next challenge</h1>
-    <p>Browse open gaming tournaments, check prize pools and join with your team.</p>
+    <p class="eyebrow">GameArena tournaments</p>
+    <h1>Available tournaments</h1>
+    <p>
+      Browse active tournaments and join with your team.
+    </p>
   </div>
 
-  <div class="tournament-grid">
-    <app-tournament-card
-      *ngFor="let tournament of tournaments$ | async"
-      [tournament]="tournament"
-      (selected)="onTournamentSelected($event)"
-    ></app-tournament-card>
-  </div>
-
-  <p class="empty-message" *ngIf="(tournaments$ | async)?.length === 0">
-    No tournaments are currently available.
+  <p class="loading-message" *ngIf="loading$ | async">
+    Loading tournaments...
   </p>
+
+  <p class="error-message" *ngIf="error$ | async as error">
+    {{ error }}
+  </p>
+
+  <ng-container *ngIf="!(loading$ | async)">
+    <ng-container *ngIf="tournaments$ | async as tournaments">
+      <div
+        class="tournament-grid"
+        *ngIf="tournaments.length > 0; else noTournaments"
+      >
+        <app-tournament-card
+          *ngFor="let tournament of tournaments"
+          [tournament]="tournament"
+          (selected)="goToTournament($event)"
+        ></app-tournament-card>
+      </div>
+
+      <ng-template #noTournaments>
+        <p class="empty-message">
+          No tournaments are currently available.
+        </p>
+      </ng-template>
+    </ng-container>
+  </ng-container>
 </section>

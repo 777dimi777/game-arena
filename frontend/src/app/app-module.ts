@@ -30,12 +30,8 @@ import { Register } from './pages/register/register';
 import { Teams } from './pages/teams/teams';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Tournaments } from './pages/tournaments/tournaments';
-
-import {
-  tournamentFeatureKey,
-  tournamentReducer,
-} from './store/tournament/tournament.reducer';
-
+import { tournamentFeatureKey, tournamentReducer } from './store/tournament/tournament.reducer';
+import { TournamentEffects } from './store/tournament/tournament.effects';
 @NgModule({
   declarations: [
     App,
@@ -66,7 +62,7 @@ import {
       [tournamentFeatureKey]: tournamentReducer,
     }),
 
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([TournamentEffects]),
 
     StoreDevtoolsModule.instrument({
       maxAge: 25,

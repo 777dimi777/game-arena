@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import { Tournament } from '../../models/tournament';
-import { TournamentService } from '../../services/tournament';
+import { TournamentActions } from '../../store/tournament/tournament.actions';
+import {
+  selectAllTournaments,
+  selectTournamentError,
+  selectTournamentLoading,
+} from '../../store/tournament/tournament.selectors';
 
 @Component({
   selector: 'app-tournaments',
@@ -12,17 +19,23 @@ import { TournamentService } from '../../services/tournament';
 })
 export class Tournaments implements OnInit {
   tournaments$: Observable<Tournament[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
   constructor(
-    private readonly tournamentService: TournamentService,
+    private readonly store: Store,
     private readonly router: Router,
   ) {
-    this.tournaments$ = this.tournamentService.getAll();
+    this.tournaments$ = this.store.select(selectAllTournaments);
+    this.loading$ = this.store.select(selectTournamentLoading);
+    this.error$ = this.store.select(selectTournamentError);
   }
 
-  ngOnInit(): void {}
+ ngOnInit(): void {
+  this.store.dispatch(TournamentActions.loadTournaments());
+}
 
-  onTournamentSelected(tournamentId: number): void {
-    this.router.navigate(['/tournaments', tournamentId]);
+  goToTournament(id: number): void {
+    this.router.navigate(['/tournaments', id]);
   }
 }
