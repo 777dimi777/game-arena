@@ -57,4 +57,27 @@ export class TournamentEffects {
       ),
     ),
   );
+  createTournament$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(TournamentActions.createTournament),
+    mergeMap(({ tournament }) =>
+      this.tournamentService.create(tournament).pipe(
+        map((createdTournament) =>
+          TournamentActions.createTournamentSuccess({
+            tournament: createdTournament,
+          }),
+        ),
+        catchError((error) =>
+          of(
+            TournamentActions.createTournamentFailure({
+              error:
+                error.error?.message ??
+                'Failed to create tournament.',
+            }),
+          ),
+        ),
+      ),
+    ),
+  ),
+);
 }

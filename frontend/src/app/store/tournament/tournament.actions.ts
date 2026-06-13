@@ -26,5 +26,24 @@ export const TournamentActions = createActionGroup({
     'Load Tournament Details Failure': props<{
       error: string;
     }>(),
+    'Create Tournament': props<{
+      tournament: {
+        name: string;
+        description: string;
+        startDate: string;
+        maxTeams: number;
+        prizePool: number;
+        status: string;
+        gameId: number;
+      };
+    }>(),
+
+    'Create Tournament Success': props<{
+      tournament: Tournament;
+    }>(),
+
+    'Create Tournament Failure': props<{
+      error: string;
+    }>(),
   },
 });

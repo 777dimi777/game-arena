@@ -34,8 +34,6 @@ export class TournamentService {
     return this.http.post<Tournament>(`${this.apiUrl}/${tournamentId}/join/${teamId}`, {});
   }
   getLeaderboard(tournamentId: number): Observable<LeaderboardItem[]> {
-  return this.http.get<LeaderboardItem[]>(
-    `${this.apiUrl}/${tournamentId}/leaderboard`,
-  );
-}
+    return this.http.get<LeaderboardItem[]>(`${this.apiUrl}/${tournamentId}/leaderboard`);
+  }
 }

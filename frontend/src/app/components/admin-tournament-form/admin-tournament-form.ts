@@ -1,10 +1,13 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { finalize } from 'rxjs';
+import { Component, OnInit, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 import { Game } from '../../models/game';
-import { Tournament } from '../../models/tournament';
 import { GameService } from '../../services/game';
-import { TournamentService } from '../../services/tournament';
+import { TournamentActions } from '../../store/tournament/tournament.actions';
+import {
+  selectTournamentError,
+  selectTournamentLoading,
+} from '../../store/tournament/tournament.selectors';
 
 @Component({
   selector: 'app-admin-tournament-form',
@@ -13,27 +16,23 @@ import { TournamentService } from '../../services/tournament';
   styleUrl: './admin-tournament-form.scss',
 })
 export class AdminTournamentForm implements OnInit {
+  private readonly store = inject(Store);
+  private readonly gameService = inject(GameService);
+
   name = '';
   description = '';
   startDate = '';
-  maxTeams = 2;
+  maxTeams = 8;
   prizePool = 0;
   status = 'OPEN';
   gameId = 0;
 
   games: Game[] = [];
 
-  loading = false;
-  errorMessage = '';
+  loading$ = this.store.select(selectTournamentLoading);
+  error$ = this.store.select(selectTournamentError);
+
   successMessage = '';
-
-  @Output()
-  tournamentCreated = new EventEmitter<Tournament>();
-
-  constructor(
-    private readonly tournamentService: TournamentService,
-    private readonly gameService: GameService,
-  ) {}
 
   ngOnInit(): void {
     this.gameService.getAll().subscribe({
@@ -45,60 +44,40 @@ export class AdminTournamentForm implements OnInit {
         }
       },
       error: () => {
-        this.errorMessage = 'Failed to load games.';
+        this.successMessage = '';
       },
     });
   }
 
   onSubmit(): void {
-    this.errorMessage = '';
     this.successMessage = '';
 
     if (this.gameId === 0) {
-      this.errorMessage = 'Please select a game.';
       return;
     }
 
-    this.loading = true;
-
-    this.tournamentService
-      .create({
-        name: this.name,
-        description: this.description,
-        startDate: this.startDate,
-        maxTeams: Number(this.maxTeams),
-        prizePool: Number(this.prizePool),
-        status: this.status,
-        gameId: Number(this.gameId),
-      })
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        }),
-      )
-      .subscribe({
-        next: (tournament) => {
-          this.successMessage = 'Tournament created successfully.';
-          this.tournamentCreated.emit(tournament);
-
-          this.name = '';
-          this.description = '';
-          this.startDate = '';
-          this.maxTeams = 2;
-          this.prizePool = 0;
-          this.status = 'OPEN';
-
-          if (this.games.length > 0) {
-            this.gameId = this.games[0].id;
-          }
+    this.store.dispatch(
+      TournamentActions.createTournament({
+        tournament: {
+          name: this.name,
+          description: this.description,
+          startDate: this.startDate,
+          maxTeams: Number(this.maxTeams),
+          prizePool: Number(this.prizePool),
+          status: this.status,
+          gameId: Number(this.gameId),
         },
-        error: (error) => {
-          const message = error.error?.message;
+      }),
+    );
 
-          this.errorMessage = Array.isArray(message)
-            ? message.join(', ')
-            : message ?? 'Failed to create tournament.';
-        },
-      });
+    this.successMessage =
+      'Tournament creation request has been sent.';
+
+    this.name = '';
+    this.description = '';
+    this.startDate = '';
+    this.maxTeams = 8;
+    this.prizePool = 0;
+    this.status = 'OPEN';
   }
 }
