@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { AuthService, CurrentUser } from '../../services/auth';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -9,9 +9,11 @@ import { AuthService, CurrentUser } from '../../services/auth';
   styleUrl: './profile.scss',
 })
 export class Profile {
-  user: CurrentUser | null;
+  private readonly authService = inject(AuthService);
 
-  constructor(private readonly authService: AuthService) {
-    this.user = this.authService.getCurrentUser();
+  user = this.authService.getCurrentUser();
+
+  isAdmin(): boolean {
+    return this.user?.role === 'ADMIN';
   }
 }
