@@ -1,38 +1,89 @@
-<nav class="navbar">
-  <a routerLink="/" class="logo">GameArena</a>
-
-  <div class="nav-links">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      Home
+<div class="app-shell">
+  <nav class="navbar">
+    <a routerLink="/" class="logo">
+      GameArena
     </a>
 
-    <a routerLink="/tournaments" routerLinkActive="active"> Tournaments </a>
-    <a routerLink="/matches" routerLinkActive="active"> Matches </a>
-    <a routerLink="/teams" routerLinkActive="active"> Teams </a>
-
-    <a routerLink="/games" routerLinkActive="active"> Games </a>
-
-    <ng-container *ngIf="!isLoggedIn()">
-      <a routerLink="/login" routerLinkActive="active"> Login </a>
-
-      <a routerLink="/register" class="register-button"> Register </a>
-    </ng-container>
-    <ng-container *ngIf="isLoggedIn()">
-      <a routerLink="/profile" routerLinkActive="active"> Profile </a>
-
-      <a *ngIf="getCurrentUser()?.role === 'ADMIN'" routerLink="/admin" routerLinkActive="active">
-        Admin
+    <div class="nav-links">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Home
       </a>
 
-      <span class="username">
-        {{ getCurrentUser()?.username }}
-      </span>
+      <a routerLink="/tournaments" routerLinkActive="active">
+        Tournaments
+      </a>
 
-      <button type="button" class="logout-button" (click)="logout()">Logout</button>
-    </ng-container>
-  </div>
-</nav>
+      <a routerLink="/matches" routerLinkActive="active">
+        Matches
+      </a>
 
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+      <a routerLink="/teams" routerLinkActive="active">
+        Teams
+      </a>
+
+      <a routerLink="/games" routerLinkActive="active">
+        Games
+      </a>
+
+      <a
+        routerLink="/profile"
+        routerLinkActive="active"
+        *ngIf="isLoggedIn()"
+      >
+        Profile
+      </a>
+
+      <a
+        routerLink="/admin"
+        routerLinkActive="active"
+        *ngIf="isAdmin()"
+      >
+        Admin
+      </a>
+    </div>
+
+    <div class="auth-actions">
+      <ng-container *ngIf="isLoggedIn(); else guestLinks">
+        <span class="user-badge">
+          {{ getCurrentUser()?.username }}
+        </span>
+
+        <button type="button" (click)="logout()">
+          Logout
+        </button>
+      </ng-container>
+
+      <ng-template #guestLinks>
+        <a routerLink="/login" routerLinkActive="active">
+          Login
+        </a>
+
+        <a routerLink="/register" class="register-link">
+          Register
+        </a>
+      </ng-template>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>GameArena</strong>
+      <p>Gaming tournament platform built with Angular, RxJS, NgRx and NestJS.</p>
+    </div>
+
+    <div class="footer-links">
+      <a routerLink="/tournaments">Tournaments</a>
+      <a routerLink="/matches">Matches</a>
+      <a routerLink="/teams">Teams</a>
+      <a routerLink="/games">Games</a>
+    </div>
+  </footer>
+</div>

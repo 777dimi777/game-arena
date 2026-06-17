@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService, CurrentUser } from './services/auth';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
-  standalone: false,
   templateUrl: './app.html',
+  standalone: false,
   styleUrl: './app.scss',
 })
 export class App {
@@ -19,12 +19,16 @@ export class App {
     return this.authService.isLoggedIn();
   }
 
-  getCurrentUser(): CurrentUser | null {
+  isAdmin(): boolean {
+    return this.authService.getCurrentUser()?.role === 'ADMIN';
+  }
+
+  getCurrentUser() {
     return this.authService.getCurrentUser();
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }
