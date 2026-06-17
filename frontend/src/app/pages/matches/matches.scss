@@ -152,3 +152,26 @@ h1 {
     justify-content: center;
   }
 }
+@media (max-width: 700px) {
+  .match-card {
+    padding: 20px;
+  }
+
+  .match-top {
+    flex-direction: column;
+  }
+
+  .teams {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .team,
+  .team.right {
+    justify-content: center;
+  }
+
+  .score {
+    justify-content: center;
+  }
+}

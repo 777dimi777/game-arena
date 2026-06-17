@@ -139,3 +139,20 @@ button:hover {
 .search-card input::placeholder {
   color: #64748b;
 }
+@media (max-width: 900px) {
+  .page {
+    padding: 40px 24px;
+  }
+
+  .page-header h1 {
+    font-size: 38px;
+  }
+
+  .tournament-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-card {
+    max-width: 100%;
+  }
+}

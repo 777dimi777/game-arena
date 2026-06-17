@@ -262,3 +262,28 @@ h1 {
     display: none;
   }
 }
+@media (max-width: 900px) {
+  .details-page {
+    padding: 40px 24px;
+  }
+
+  .details-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-grid,
+  .team-list {
+    grid-template-columns: 1fr;
+  }
+
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 60px 1fr 80px;
+  }
+
+  .leaderboard-header span:nth-child(3),
+  .leaderboard-row span:nth-child(3) {
+    display: none;
+  }
+}

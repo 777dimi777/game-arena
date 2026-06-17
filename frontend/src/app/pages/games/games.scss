@@ -33,7 +33,7 @@ h1 {
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+ grid-template-columns: 1fr;
   gap: 24px;
 }
 
@@ -96,5 +96,14 @@ h1 {
 
   .page {
     padding: 40px 24px;
+  }
+}
+@media (max-width: 900px) {
+  .page {
+    padding: 40px 24px;
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr;
   }
 }
