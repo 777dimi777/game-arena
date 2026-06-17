@@ -25,6 +25,6 @@ export class TeamService {
     return this.http.get<Team>(`${this.apiUrl}/${id}`);
   }
   create(data: CreateTeamData): Observable<Team> {
-  return this.http.post<Team>(this.apiUrl, data);
-}
+    return this.http.post<Team>(this.apiUrl, data);
+  }
 }

@@ -1,52 +1,81 @@
 <section class="home-page">
-  <div class="hero">
-    <p class="eyebrow">Welcome to GameArena</p>
+  <section class="hero-section">
+    <div class="hero-content">
+      <p class="hero-eyebrow">WELCOME TO GAMEARENA</p>
 
-    <h1>Compete in gaming tournaments</h1>
+      <h1>Compete in gaming tournaments like a pro</h1>
 
-    <p>
-      Create teams, join tournaments, follow matches and track winners.
-    </p>
+      <p class="hero-description">
+        Create teams, join tournaments, follow matches, track results and
+        compete with players across different games.
+      </p>
 
-    <a routerLink="/tournaments" class="hero-button">
-      Browse tournaments
-    </a>
-  </div>
-</section>
+      <div class="hero-actions">
+        <a routerLink="/tournaments" class="primary-btn">
+          Browse tournaments
+        </a>
 
-<section class="stats-section">
-  <div class="section-title">
-    <p class="eyebrow">Live platform stats</p>
-    <h2>GameArena overview</h2>
-  </div>
-
-  <ng-container *ngIf="stats$ | async as stats; else loadingStats">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span>Tournaments</span>
-        <strong>{{ stats.tournamentsCount }}</strong>
-      </div>
-
-      <div class="stat-card">
-        <span>Games</span>
-        <strong>{{ stats.gamesCount }}</strong>
-      </div>
-
-      <div class="stat-card">
-        <span>Teams</span>
-        <strong>{{ stats.teamsCount }}</strong>
-      </div>
-
-      <div class="stat-card">
-        <span>Matches</span>
-        <strong>{{ stats.matchesCount }}</strong>
+        <a routerLink="/teams" class="secondary-btn">
+          Explore teams
+        </a>
       </div>
     </div>
-  </ng-container>
 
-  <ng-template #loadingStats>
-    <p class="loading-message">
-      Loading statistics...
-    </p>
-  </ng-template>
+    <div class="hero-side-card">
+      <p class="side-label">Platform highlights</p>
+
+      <div class="side-item">
+        <strong>Competitive tournaments</strong>
+        <span>Join active events and track standings live.</span>
+      </div>
+
+      <div class="side-item">
+        <strong>Team management</strong>
+        <span>Create teams and register them for upcoming events.</span>
+      </div>
+
+      <div class="side-item">
+        <strong>Match tracking</strong>
+        <span>Follow match results and leaderboard changes.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="section-title">
+      <p class="section-eyebrow">LIVE PLATFORM STATS</p>
+      <h2>GameArena overview</h2>
+      <p class="section-description">
+        Quick insight into the current state of the platform.
+      </p>
+    </div>
+
+    <ng-container *ngIf="stats$ | async as stats; else loadingStats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Tournaments</span>
+          <strong>{{ stats.tournamentsCount }}</strong>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Games</span>
+          <strong>{{ stats.gamesCount }}</strong>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Teams</span>
+          <strong>{{ stats.teamsCount }}</strong>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Matches</span>
+          <strong>{{ stats.matchesCount }}</strong>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #loadingStats>
+      <p class="loading-message">Loading statistics...</p>
+    </ng-template>
+  </section>
 </section>

@@ -2,13 +2,9 @@
   <div class="page-header">
     <p class="eyebrow">Registered teams</p>
     <h1>Meet the competitors</h1>
-    <p>
-      Discover teams participating in GameArena tournaments.
-    </p>
+    <p>Discover teams participating in GameArena tournaments.</p>
   </div>
-  <a routerLink="/create-team" class="create-team-button">
-  Create team
-</a>
+  <a routerLink="/create-team" class="create-team-button"> Create team </a>
 
   <div class="team-grid">
     <article class="team-card" *ngFor="let team of teams$ | async">
