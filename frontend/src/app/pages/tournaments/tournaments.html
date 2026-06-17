@@ -7,6 +7,17 @@
     </p>
   </div>
 
+  <div class="search-card">
+    <label for="search">Search tournaments</label>
+
+    <input
+      id="search"
+      type="text"
+      placeholder="Search by name, game, status..."
+      (input)="onSearch($any($event.target).value)"
+    />
+  </div>
+
   <p class="loading-message" *ngIf="loading$ | async">
     Loading tournaments...
   </p>
@@ -16,7 +27,7 @@
   </p>
 
   <ng-container *ngIf="!(loading$ | async)">
-    <ng-container *ngIf="tournaments$ | async as tournaments">
+    <ng-container *ngIf="filteredTournaments$ | async as tournaments">
       <div
         class="tournament-grid"
         *ngIf="tournaments.length > 0; else noTournaments"
@@ -30,7 +41,7 @@
 
       <ng-template #noTournaments>
         <p class="empty-message">
-          No tournaments are currently available.
+          No tournaments match your search.
         </p>
       </ng-template>
     </ng-container>
