@@ -23,9 +23,7 @@ export class TournamentEffects {
           catchError((error) =>
             of(
               TournamentActions.loadTournamentsFailure({
-                error:
-                  error.error?.message ??
-                  'Failed to load tournaments.',
+                error: error.error?.message ?? 'Failed to load tournaments.',
               }),
             ),
           ),
@@ -47,9 +45,7 @@ export class TournamentEffects {
           catchError((error) =>
             of(
               TournamentActions.loadTournamentDetailsFailure({
-                error:
-                  error.error?.message ??
-                  'Failed to load tournament details.',
+                error: error.error?.message ?? 'Failed to load tournament details.',
               }),
             ),
           ),
@@ -58,26 +54,45 @@ export class TournamentEffects {
     ),
   );
   createTournament$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(TournamentActions.createTournament),
-    mergeMap(({ tournament }) =>
-      this.tournamentService.create(tournament).pipe(
-        map((createdTournament) =>
-          TournamentActions.createTournamentSuccess({
-            tournament: createdTournament,
-          }),
-        ),
-        catchError((error) =>
-          of(
-            TournamentActions.createTournamentFailure({
-              error:
-                error.error?.message ??
-                'Failed to create tournament.',
+    this.actions$.pipe(
+      ofType(TournamentActions.createTournament),
+      mergeMap(({ tournament }) =>
+        this.tournamentService.create(tournament).pipe(
+          map((createdTournament) =>
+            TournamentActions.createTournamentSuccess({
+              tournament: createdTournament,
             }),
+          ),
+          catchError((error) =>
+            of(
+              TournamentActions.createTournamentFailure({
+                error: error.error?.message ?? 'Failed to create tournament.',
+              }),
+            ),
           ),
         ),
       ),
     ),
-  ),
-);
+  );
+  deleteTournament$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TournamentActions.deleteTournament),
+      mergeMap(({ id }) =>
+        this.tournamentService.delete(id).pipe(
+          map(() =>
+            TournamentActions.deleteTournamentSuccess({
+              id,
+            }),
+          ),
+          catchError((error) =>
+            of(
+              TournamentActions.deleteTournamentFailure({
+                error: error.error?.message ?? 'Failed to delete tournament.',
+              }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }

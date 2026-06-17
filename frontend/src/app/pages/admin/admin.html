@@ -5,21 +5,71 @@
     <p>Manage games, tournaments, teams and match results.</p>
   </div>
 
+  <section class="admin-list">
+    <div class="list-header">
+      <div>
+        <p class="eyebrow">Tournament admin</p>
+        <h2>Manage tournaments</h2>
+      </div>
+    </div>
+
+    <p class="loading-message" *ngIf="loading$ | async">
+      Loading tournaments...
+    </p>
+
+    <p class="error-message" *ngIf="error$ | async as error">
+      {{ error }}
+    </p>
+
+    <ng-container *ngIf="tournaments$ | async as tournaments">
+      <p class="empty-message" *ngIf="tournaments.length === 0">
+        No tournaments found.
+      </p>
+
+      <div class="admin-tournament-list" *ngIf="tournaments.length > 0">
+        <div class="admin-tournament-row" *ngFor="let tournament of tournaments">
+          <div>
+            <strong>{{ tournament.name }}</strong>
+            <p>
+              {{ tournament.game.name }} ·
+              {{ tournament.teams.length }}/{{ tournament.maxTeams }} teams
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="delete-button"
+            (click)="deleteTournament(tournament.id)"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+
   <div class="admin-content">
-    <app-admin-game-form (gameCreated)="onGameCreated($event)"></app-admin-game-form>
+    <app-admin-game-form
+      (gameCreated)="onGameCreated($event)"
+    ></app-admin-game-form>
 
     <app-admin-tournament-form></app-admin-tournament-form>
 
-    <app-admin-match-form (matchCreated)="onMatchCreated($event)"></app-admin-match-form>
+    <app-admin-match-form
+      (matchCreated)="onMatchCreated($event)"
+    ></app-admin-match-form>
 
     <app-admin-match-result-form
       (resultUpdated)="onResultUpdated($event)"
     ></app-admin-match-result-form>
   </div>
+
   <div class="result-grid">
     <section class="result-card" *ngIf="lastCreatedGame">
       <p class="result-label">Latest created game</p>
+
       <h2>{{ lastCreatedGame.name }}</h2>
+
       <p>
         {{ lastCreatedGame.genre }} · Team size:
         {{ lastCreatedGame.teamSize }}
@@ -28,9 +78,15 @@
 
     <section class="result-card" *ngIf="lastCreatedTournament">
       <p class="result-label">Latest created tournament</p>
+
       <h2>{{ lastCreatedTournament.name }}</h2>
-      <p>{{ lastCreatedTournament.game.name }} · {{ lastCreatedTournament.prizePool }}€</p>
+
+      <p>
+        {{ lastCreatedTournament.game.name }} ·
+        {{ lastCreatedTournament.prizePool }}€
+      </p>
     </section>
+
     <section class="result-card" *ngIf="lastCreatedMatch">
       <p class="result-label">Latest created match</p>
 
@@ -46,6 +102,7 @@
         {{ lastCreatedMatch.scheduledAt }}
       </p>
     </section>
+
     <section class="result-card" *ngIf="lastUpdatedMatch">
       <p class="result-label">Latest updated result</p>
 
@@ -57,9 +114,13 @@
         {{ lastUpdatedMatch.teamB.name }}
       </h2>
 
-      <p *ngIf="lastUpdatedMatch.winner">Winner: {{ lastUpdatedMatch.winner.name }}</p>
+      <p *ngIf="lastUpdatedMatch.winner">
+        Winner: {{ lastUpdatedMatch.winner.name }}
+      </p>
 
-      <p *ngIf="!lastUpdatedMatch.winner">Match ended in a draw.</p>
+      <p *ngIf="!lastUpdatedMatch.winner">
+        Match ended in a draw.
+      </p>
     </section>
   </div>
 </section>

@@ -28,43 +28,19 @@
 
     <label for="startDate">Start date</label>
 
-    <input
-      id="startDate"
-      name="startDate"
-      type="date"
-      [(ngModel)]="startDate"
-      required
-    />
+    <input id="startDate" name="startDate" type="date" [(ngModel)]="startDate" required />
 
     <label for="maxTeams">Maximum teams</label>
 
-    <input
-      id="maxTeams"
-      name="maxTeams"
-      type="number"
-      [(ngModel)]="maxTeams"
-      min="2"
-      required
-    />
+    <input id="maxTeams" name="maxTeams" type="number" [(ngModel)]="maxTeams" min="2" required />
 
     <label for="prizePool">Prize pool</label>
 
-    <input
-      id="prizePool"
-      name="prizePool"
-      type="number"
-      [(ngModel)]="prizePool"
-      min="0"
-      required
-    />
+    <input id="prizePool" name="prizePool" type="number" [(ngModel)]="prizePool" min="0" required />
 
     <label for="status">Status</label>
 
-    <select
-      id="status"
-      name="status"
-      [(ngModel)]="status"
-    >
+    <select id="status" name="status" [(ngModel)]="status">
       <option value="OPEN">OPEN</option>
       <option value="CLOSED">CLOSED</option>
       <option value="ACTIVE">ACTIVE</option>
@@ -73,30 +49,22 @@
 
     <label for="gameId">Game</label>
 
-    <select
-      id="gameId"
-      name="gameId"
-      [(ngModel)]="gameId"
-      required
-    >
-      <option
-        *ngFor="let game of games"
-        [ngValue]="game.id"
-      >
+    <select id="gameId" name="gameId" [(ngModel)]="gameId" required>
+      <option *ngFor="let game of games" [ngValue]="game.id">
         {{ game.name }}
       </option>
     </select>
 
-    <p class="error-message" *ngIf="errorMessage">
-      {{ errorMessage }}
+    <p class="error-message" *ngIf="error$ | async as error">
+      {{ error }}
     </p>
 
     <p class="success-message" *ngIf="successMessage">
       {{ successMessage }}
     </p>
 
-    <button type="submit" [disabled]="loading || games.length === 0">
-      {{ loading ? 'Creating...' : 'Create tournament' }}
+    <button type="submit" [disabled]="(loading$ | async) || games.length === 0">
+      {{ (loading$ | async) ? 'Creating...' : 'Create tournament' }}
     </button>
   </form>
 </section>

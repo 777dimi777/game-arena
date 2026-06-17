@@ -45,5 +45,16 @@ export const TournamentActions = createActionGroup({
     'Create Tournament Failure': props<{
       error: string;
     }>(),
+    'Delete Tournament': props<{
+      id: number;
+    }>(),
+
+    'Delete Tournament Success': props<{
+      id: number;
+    }>(),
+
+    'Delete Tournament Failure': props<{
+      error: string;
+    }>(),
   },
 });

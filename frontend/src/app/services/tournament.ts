@@ -36,4 +36,7 @@ export class TournamentService {
   getLeaderboard(tournamentId: number): Observable<LeaderboardItem[]> {
     return this.http.get<LeaderboardItem[]>(`${this.apiUrl}/${tournamentId}/leaderboard`);
   }
+  delete(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
 }
