@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
-import { forkJoin, map, Observable } from 'rxjs';
+import {
+  forkJoin,
+  map,
+  Observable,
+  shareReplay,
+  switchMap,
+  take,
+  timer,
+} from 'rxjs';
 
 import { GameService } from '../../services/game';
 import { MatchService } from '../../services/match';
@@ -40,6 +48,30 @@ export class Home {
         teamsCount: teams.length,
         matchesCount: matches.length,
       })),
+      switchMap((targetStats) =>
+        timer(0, 30).pipe(
+          take(31),
+          map((step) => step / 30),
+          map((progress) => ({
+            tournamentsCount: Math.round(
+              targetStats.tournamentsCount * progress,
+            ),
+            gamesCount: Math.round(
+              targetStats.gamesCount * progress,
+            ),
+            teamsCount: Math.round(
+              targetStats.teamsCount * progress,
+            ),
+            matchesCount: Math.round(
+              targetStats.matchesCount * progress,
+            ),
+          })),
+        ),
+      ),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
     );
   }
 }

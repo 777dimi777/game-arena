@@ -263,3 +263,111 @@
     font-size: 34px;
   }
 }
+.hero-logo-wrapper {
+  animation: arena-float 5s ease-in-out infinite;
+}
+
+.hero-logo {
+  animation: arena-pulse 3.5s ease-in-out infinite;
+}
+
+.primary-btn,
+.secondary-btn {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.32),
+    0 0 20px rgba(56, 189, 248, 0.24);
+}
+
+.secondary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(56, 189, 248, 0.12);
+}
+
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  animation: card-enter 0.55s ease both;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.19s;
+}
+
+.stat-card:nth-child(4) {
+  animation-delay: 0.26s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -120%;
+  left: -40%;
+  width: 55%;
+  height: 280%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(125, 211, 252, 0.13),
+    transparent
+  );
+  transform: rotate(20deg);
+  transition: left 0.55s ease;
+}
+
+.stat-card:hover::before {
+  left: 115%;
+}
+
+@keyframes arena-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-13px);
+  }
+}
+
+@keyframes arena-pulse {
+  0%,
+  100% {
+    filter:
+      drop-shadow(0 0 18px rgba(56, 189, 248, 0.4))
+      drop-shadow(0 0 28px rgba(124, 58, 237, 0.2));
+  }
+
+  50% {
+    filter:
+      drop-shadow(0 0 28px rgba(56, 189, 248, 0.65))
+      drop-shadow(0 0 45px rgba(124, 58, 237, 0.38));
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

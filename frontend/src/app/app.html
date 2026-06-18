@@ -27,6 +27,16 @@
     </div>
 
     <div class="auth-actions">
+      <button
+        type="button"
+        class="sound-toggle"
+        [class.enabled]="soundEnabled()"
+        (click)="toggleSound()"
+        [attr.aria-label]="soundEnabled() ? 'Disable sound' : 'Enable sound'"
+        [title]="soundEnabled() ? 'Disable sound' : 'Enable sound'"
+      >
+        {{ soundEnabled() ? '🔊' : '🔇' }}
+      </button>
       <ng-container *ngIf="isLoggedIn(); else guestLinks">
         <span class="user-badge">
           {{ getCurrentUser()?.username }}
