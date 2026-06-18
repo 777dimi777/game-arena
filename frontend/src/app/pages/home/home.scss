@@ -9,10 +9,28 @@
 
 .hero-section {
   display: grid;
-  grid-template-columns: 1.4fr 0.9fr;
-  gap: 40px;
+  grid-template-columns: 0.65fr 1.15fr 0.8fr;
+  gap: 34px;
   align-items: center;
   min-height: 70vh;
+}
+.hero-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-logo {
+  width: min(100%, 350px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.45))
+    drop-shadow(0 0 28px rgba(124, 58, 237, 0.28));
+  transition: transform 0.25s ease;
+}
+
+.hero-logo:hover {
+  transform: scale(1.04);
 }
 
 .hero-content {
@@ -168,7 +186,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .stat-card:hover {
@@ -211,6 +231,9 @@
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .hero-logo {
+    width: min(75%, 330px);
   }
 }
 

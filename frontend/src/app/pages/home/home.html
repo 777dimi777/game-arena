@@ -1,23 +1,22 @@
 <section class="home-page">
   <section class="hero-section">
+    <div class="hero-logo-wrapper">
+      <img src="/assets/gamearena-logo.png" alt="GameArena esports arena logo" class="hero-logo" />
+    </div>
     <div class="hero-content">
       <p class="hero-eyebrow">WELCOME TO GAMEARENA</p>
 
       <h1>Compete in gaming tournaments like a pro</h1>
 
       <p class="hero-description">
-        Create teams, join tournaments, follow matches, track results and
-        compete with players across different games.
+        Create teams, join tournaments, follow matches, track results and compete with players
+        across different games.
       </p>
 
       <div class="hero-actions">
-        <a routerLink="/tournaments" class="primary-btn">
-          Browse tournaments
-        </a>
+        <a routerLink="/tournaments" class="primary-btn"> Browse tournaments </a>
 
-        <a routerLink="/teams" class="secondary-btn">
-          Explore teams
-        </a>
+        <a routerLink="/teams" class="secondary-btn"> Explore teams </a>
       </div>
     </div>
 
@@ -45,9 +44,7 @@
     <div class="section-title">
       <p class="section-eyebrow">LIVE PLATFORM STATS</p>
       <h2>GameArena overview</h2>
-      <p class="section-description">
-        Quick insight into the current state of the platform.
-      </p>
+      <p class="section-description">Quick insight into the current state of the platform.</p>
     </div>
 
     <ng-container *ngIf="stats$ | async as stats; else loadingStats">

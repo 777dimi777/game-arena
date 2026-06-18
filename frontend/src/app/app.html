@@ -1,49 +1,27 @@
 <div class="app-shell">
   <nav class="navbar">
     <a routerLink="/" class="logo">
-      GameArena
+      <img src="/assets/gamearena-logo.png" alt="GameArena logo" class="logo-image" />
+
+      <span>GameArena</span>
     </a>
 
     <div class="nav-links">
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         Home
       </a>
 
-      <a routerLink="/tournaments" routerLinkActive="active">
-        Tournaments
-      </a>
+      <a routerLink="/tournaments" routerLinkActive="active"> Tournaments </a>
 
-      <a routerLink="/matches" routerLinkActive="active">
-        Matches
-      </a>
+      <a routerLink="/matches" routerLinkActive="active"> Matches </a>
 
-      <a routerLink="/teams" routerLinkActive="active">
-        Teams
-      </a>
+      <a routerLink="/teams" routerLinkActive="active"> Teams </a>
 
-      <a routerLink="/games" routerLinkActive="active">
-        Games
-      </a>
+      <a routerLink="/games" routerLinkActive="active"> Games </a>
 
-      <a
-        routerLink="/profile"
-        routerLinkActive="active"
-        *ngIf="isLoggedIn()"
-      >
-        Profile
-      </a>
+      <a routerLink="/profile" routerLinkActive="active" *ngIf="isLoggedIn()"> Profile </a>
 
-      <a
-        routerLink="/admin"
-        routerLinkActive="active"
-        *ngIf="isAdmin()"
-      >
-        Admin
-      </a>
+      <a routerLink="/admin" routerLinkActive="active" *ngIf="isAdmin()"> Admin </a>
     </div>
 
     <div class="auth-actions">
@@ -52,19 +30,13 @@
           {{ getCurrentUser()?.username }}
         </span>
 
-        <button type="button" (click)="logout()">
-          Logout
-        </button>
+        <button type="button" (click)="logout()">Logout</button>
       </ng-container>
 
       <ng-template #guestLinks>
-        <a routerLink="/login" routerLinkActive="active">
-          Login
-        </a>
+        <a routerLink="/login" routerLinkActive="active"> Login </a>
 
-        <a routerLink="/register" class="register-link">
-          Register
-        </a>
+        <a routerLink="/register" class="register-link"> Register </a>
       </ng-template>
     </div>
   </nav>
