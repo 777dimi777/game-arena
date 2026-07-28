@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import {
-  Observable,
-  Subject,
+  BehaviorSubject,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
   map,
+  Observable,
   startWith,
+  Subject,
 } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { Tournament } from '../../models/tournament';
 import { TournamentActions } from '../../store/tournament/tournament.actions';
@@ -18,7 +19,6 @@ import {
   selectTournamentError,
   selectTournamentLoading,
 } from '../../store/tournament/tournament.selectors';
-
 @Component({
   selector: 'app-tournaments',
   standalone: false,
@@ -32,7 +32,16 @@ export class Tournaments implements OnInit {
   error$: Observable<string | null>;
 
   private readonly searchSubject = new Subject<string>();
+  private readonly statusSubject = new BehaviorSubject<string>('ALL');
+  statusFilters = [
+    { label: 'All', value: 'ALL' },
+    { label: 'Open', value: 'OPEN' },
+    { label: 'Ongoing', value: 'ONGOING' },
+    { label: 'Finished', value: 'FINISHED' },
+    { label: 'Cancelled', value: 'CANCELLED' },
+  ];
 
+  selectedStatus = 'ALL';
   constructor(
     private readonly store: Store,
     private readonly router: Router,
@@ -51,29 +60,26 @@ export class Tournaments implements OnInit {
     this.filteredTournaments$ = combineLatest([
       this.tournaments$,
       search$,
+      this.statusSubject,
     ]).pipe(
-      map(([tournaments, search]) => {
-        if (!search) {
-          return tournaments;
-        }
-
+      map(([tournaments, search, status]) => {
         return tournaments.filter((tournament) => {
-          const name = tournament.name.toLowerCase();
-          const description = tournament.description.toLowerCase();
-          const game = tournament.game.name.toLowerCase();
-          const status = tournament.status.toLowerCase();
+          const matchesSearch =
+            tournament.name.toLowerCase().includes(search) ||
+            tournament.description?.toLowerCase().includes(search) ||
+            tournament.game?.name.toLowerCase().includes(search);
 
-          return (
-            name.includes(search) ||
-            description.includes(search) ||
-            game.includes(search) ||
-            status.includes(search)
-          );
+          const matchesStatus = status === 'ALL' || tournament.status === status;
+
+          return matchesSearch && matchesStatus;
         });
       }),
     );
   }
-
+  setStatusFilter(status: string): void {
+    this.selectedStatus = status;
+    this.statusSubject.next(status);
+  }
   ngOnInit(): void {
     this.store.dispatch(TournamentActions.loadTournaments());
   }

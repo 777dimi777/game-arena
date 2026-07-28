@@ -2,9 +2,7 @@
   <div class="page-header">
     <p class="eyebrow">GameArena tournaments</p>
     <h1>Available tournaments</h1>
-    <p>
-      Browse active tournaments and join with your team.
-    </p>
+    <p>Browse active tournaments and join with your team.</p>
   </div>
 
   <div class="search-card">
@@ -16,11 +14,20 @@
       placeholder="Search by name, game, status..."
       (input)="onSearch($any($event.target).value)"
     />
+    <div class="status-filters">
+      <button
+        type="button"
+        *ngFor="let filter of statusFilters"
+        class="status-filter"
+        [class.active]="selectedStatus === filter.value"
+        (click)="setStatusFilter(filter.value)"
+      >
+        {{ filter.label }}
+      </button>
+    </div>
   </div>
 
-  <p class="loading-message" *ngIf="loading$ | async">
-    Loading tournaments...
-  </p>
+  <p class="loading-message" *ngIf="loading$ | async">Loading tournaments...</p>
 
   <p class="error-message" *ngIf="error$ | async as error">
     {{ error }}
@@ -28,10 +35,7 @@
 
   <ng-container *ngIf="!(loading$ | async)">
     <ng-container *ngIf="filteredTournaments$ | async as tournaments">
-      <div
-        class="tournament-grid"
-        *ngIf="tournaments.length > 0; else noTournaments"
-      >
+      <div class="tournament-grid" *ngIf="tournaments.length > 0; else noTournaments">
         <app-tournament-card
           *ngFor="let tournament of tournaments"
           [tournament]="tournament"
@@ -40,9 +44,7 @@
       </div>
 
       <ng-template #noTournaments>
-        <p class="empty-message">
-          No tournaments match your search.
-        </p>
+        <p class="empty-message">No tournaments match your search.</p>
       </ng-template>
     </ng-container>
   </ng-container>
