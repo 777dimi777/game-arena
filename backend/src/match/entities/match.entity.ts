@@ -3,13 +3,23 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Tournament } from '../../tournament/entities/tournament.entity';
 import { Team } from '../../team/entities/team.entity';
 
+export enum MatchStatus {
+  SCHEDULED = 'SCHEDULED',
+  LIVE = 'LIVE',
+  FINISHED = 'FINISHED',
+  CANCELLED = 'CANCELLED',
+}
+
 @Entity()
 export class Match {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  scheduledAt!: string;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  scheduledAt?: Date;
 
   @Column({ default: 0 })
   scoreA!: number;
@@ -27,5 +37,12 @@ export class Match {
   teamB!: Team;
 
   @ManyToOne(() => Team, { eager: true, nullable: true })
-  winner?: Team;
+  winner?: Team | null;
+
+  @Column({
+    type: 'enum',
+    enum: MatchStatus,
+    default: MatchStatus.SCHEDULED,
+  })
+  status!: MatchStatus;
 }

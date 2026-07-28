@@ -1,10 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { Match, MatchStatus } from './entities/match.entity';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
-import { Match } from './entities/match.entity';
 import { Tournament } from '../tournament/entities/tournament.entity';
 import { Team } from '../team/entities/team.entity';
 
@@ -46,11 +49,18 @@ export class MatchService {
       throw new NotFoundException('Team B not found');
     }
 
+    if (teamA.id === teamB.id) {
+      throw new BadRequestException('Team A and Team B cannot be the same');
+    }
+
     const match = this.matchRepository.create({
-      scheduledAt: createMatchDto.scheduledAt,
       tournament,
       teamA,
       teamB,
+      status: createMatchDto.status ?? MatchStatus.SCHEDULED,
+      scheduledAt: createMatchDto.scheduledAt
+        ? new Date(createMatchDto.scheduledAt)
+        : undefined,
       scoreA: 0,
       scoreB: 0,
     });
@@ -113,6 +123,10 @@ export class MatchService {
       match.teamB = teamB;
     }
 
+    if (match.teamA?.id === match.teamB?.id) {
+      throw new BadRequestException('Team A and Team B cannot be the same');
+    }
+
     if (updateMatchDto.winnerId) {
       const winner = await this.teamRepository.findOne({
         where: { id: updateMatchDto.winnerId },
@@ -125,8 +139,12 @@ export class MatchService {
       match.winner = winner;
     }
 
+    if (updateMatchDto.status !== undefined) {
+      match.status = updateMatchDto.status;
+    }
+
     if (updateMatchDto.scheduledAt !== undefined) {
-      match.scheduledAt = updateMatchDto.scheduledAt;
+      match.scheduledAt = new Date(updateMatchDto.scheduledAt);
     }
 
     if (updateMatchDto.scoreA !== undefined) {
@@ -139,22 +157,25 @@ export class MatchService {
 
     return this.matchRepository.save(match);
   }
+
   async updateResult(id: number, scoreA: number, scoreB: number) {
-  const match = await this.findOne(id);
+    const match = await this.findOne(id);
 
-  match.scoreA = scoreA;
-  match.scoreB = scoreB;
+    match.scoreA = scoreA;
+    match.scoreB = scoreB;
+    match.status = MatchStatus.FINISHED;
 
-  if (scoreA > scoreB) {
-    match.winner = match.teamA;
-  } else if (scoreB > scoreA) {
-    match.winner = match.teamB;
-  } else {
-    match.winner = undefined;
+    if (scoreA > scoreB) {
+      match.winner = match.teamA;
+    } else if (scoreB > scoreA) {
+      match.winner = match.teamB;
+    } else {
+      match.winner = null;
+    }
+
+    return this.matchRepository.save(match);
   }
 
-  return this.matchRepository.save(match);
-}
   async remove(id: number) {
     const match = await this.findOne(id);
     return this.matchRepository.remove(match);
