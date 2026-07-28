@@ -21,4 +21,18 @@ export class Matches {
       }),
     );
   }
+  getDisplayStatus(match: Match): string {
+    const hasResult =
+      match.scoreA !== null &&
+      match.scoreA !== undefined &&
+      match.scoreB !== null &&
+      match.scoreB !== undefined &&
+      (match.scoreA > 0 || match.scoreB > 0);
+
+    if (match.winner || hasResult) {
+      return 'FINISHED';
+    }
+
+    return match.status;
+  }
 }

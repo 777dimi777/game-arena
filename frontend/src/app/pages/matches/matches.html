@@ -12,15 +12,12 @@
           <span class="tournament-name">
             {{ match.tournament.name }}
           </span>
-          <span class="match-status" [ngClass]="match.status">
-            {{ match.status }}
+          <span class="match-status" [ngClass]="getDisplayStatus(match)">
+            {{ getDisplayStatus(match) }}
           </span>
-          <p *ngIf="match.scheduledAt">
+          <p class="match-date" *ngIf="match.scheduledAt">
             Scheduled:
             {{ match.scheduledAt | date: 'medium' }}
-          </p>
-          <p class="scheduled">
-            {{ match.scheduledAt }}
           </p>
         </div>
 
