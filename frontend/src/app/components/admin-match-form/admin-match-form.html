@@ -17,52 +17,37 @@
 
     <label for="tournamentId">Tournament</label>
 
-    <select
-      id="tournamentId"
-      name="tournamentId"
-      [(ngModel)]="tournamentId"
-      required
-    >
-      <option
-        *ngFor="let tournament of tournaments"
-        [ngValue]="tournament.id"
-      >
+    <select id="tournamentId" name="tournamentId" [(ngModel)]="tournamentId" required>
+      <option *ngFor="let tournament of tournaments" [ngValue]="tournament.id">
         {{ tournament.name }}
       </option>
     </select>
-
+    <label for="matchStatus">Status</label>
+    <select id="matchStatus" name="status" [(ngModel)]="status">
+      <option value="SCHEDULED">Scheduled</option>
+      <option value="LIVE">Live</option>
+      <option value="FINISHED">Finished</option>
+      <option value="CANCELLED">Cancelled</option>
+    </select>
+    <label for="scheduledAt">Scheduled at</label>
+    <input id="scheduledAt" type="datetime-local" name="scheduledAt" [(ngModel)]="scheduledAt" />
     <label for="teamAId">Team A</label>
 
-    <select
-      id="teamAId"
-      name="teamAId"
-      [(ngModel)]="teamAId"
-      required
-    >
-      <option
-        *ngFor="let team of teams"
-        [ngValue]="team.id"
-      >
+    <select id="teamAId" name="teamAId" [(ngModel)]="teamAId" required>
+      <option *ngFor="let team of teams" [ngValue]="team.id">
         {{ team.name }} ({{ team.tag }})
       </option>
     </select>
 
     <label for="teamBId">Team B</label>
 
-    <select
-      id="teamBId"
-      name="teamBId"
-      [(ngModel)]="teamBId"
-      required
-    >
-      <option
-        *ngFor="let team of teams"
-        [ngValue]="team.id"
-      >
+    <select id="teamBId" name="teamBId" [(ngModel)]="teamBId" required>
+      <option *ngFor="let team of teams" [ngValue]="team.id">
         {{ team.name }} ({{ team.tag }})
       </option>
     </select>
-
+    <label for="scheduledAt">Scheduled at</label>
+    <input id="scheduledAt" type="datetime-local" name="scheduledAt" [(ngModel)]="scheduledAt" />
     <p class="error-message" *ngIf="errorMessage">
       {{ errorMessage }}
     </p>
@@ -71,14 +56,7 @@
       {{ successMessage }}
     </p>
 
-    <button
-      type="submit"
-      [disabled]="
-        loading ||
-        tournaments.length === 0 ||
-        teams.length < 2
-      "
-    >
+    <button type="submit" [disabled]="loading || tournaments.length === 0 || teams.length < 2">
       {{ loading ? 'Creating...' : 'Create match' }}
     </button>
   </form>

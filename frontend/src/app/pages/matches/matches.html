@@ -2,9 +2,7 @@
   <div class="page-header">
     <p class="eyebrow">Match schedule</p>
     <h1>Upcoming and completed matches</h1>
-    <p>
-      Follow tournament matches, results and winning teams.
-    </p>
+    <p>Follow tournament matches, results and winning teams.</p>
   </div>
 
   <div class="match-list">
@@ -14,7 +12,13 @@
           <span class="tournament-name">
             {{ match.tournament.name }}
           </span>
-
+          <span class="match-status" [ngClass]="match.status">
+            {{ match.status }}
+          </span>
+          <p *ngIf="match.scheduledAt">
+            Scheduled:
+            {{ match.scheduledAt | date: 'medium' }}
+          </p>
           <p class="scheduled">
             {{ match.scheduledAt }}
           </p>
@@ -55,14 +59,10 @@
       </div>
 
       <ng-template #pendingResult>
-        <div class="pending">
-          Result pending
-        </div>
+        <div class="pending">Result pending</div>
       </ng-template>
     </article>
   </div>
 
-  <p class="empty-message" *ngIf="matches.length === 0">
-    No matches are currently available.
-  </p>
+  <p class="empty-message" *ngIf="matches.length === 0">No matches are currently available.</p>
 </section>

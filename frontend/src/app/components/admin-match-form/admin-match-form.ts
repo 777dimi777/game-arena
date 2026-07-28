@@ -7,7 +7,7 @@ import { Tournament } from '../../models/tournament';
 import { MatchService } from '../../services/match';
 import { TeamService } from '../../services/team';
 import { TournamentService } from '../../services/tournament';
-
+import { MatchStatus } from '../../models/match';
 @Component({
   selector: 'app-admin-match-form',
   standalone: false,
@@ -16,6 +16,7 @@ import { TournamentService } from '../../services/tournament';
 })
 export class AdminMatchForm implements OnInit {
   scheduledAt = '';
+   status: MatchStatus = 'SCHEDULED';
   tournamentId = 0;
   teamAId = 0;
   teamBId = 0;
@@ -69,11 +70,7 @@ export class AdminMatchForm implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    if (
-      this.tournamentId === 0 ||
-      this.teamAId === 0 ||
-      this.teamBId === 0
-    ) {
+    if (this.tournamentId === 0 || this.teamAId === 0 || this.teamBId === 0) {
       this.errorMessage = 'Please select a tournament and both teams.';
       return;
     }
@@ -87,10 +84,11 @@ export class AdminMatchForm implements OnInit {
 
     this.matchService
       .create({
-        scheduledAt: this.scheduledAt,
         tournamentId: Number(this.tournamentId),
         teamAId: Number(this.teamAId),
         teamBId: Number(this.teamBId),
+        status: this.status,
+        scheduledAt: this.scheduledAt || undefined,
       })
       .pipe(
         finalize(() => {
