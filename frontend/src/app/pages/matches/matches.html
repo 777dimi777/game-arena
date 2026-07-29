@@ -1,12 +1,92 @@
-<section class="page" *ngIf="matches$ | async as matches">
+<section class="page">
   <div class="page-header">
     <p class="eyebrow">Match schedule</p>
     <h1>Upcoming and completed matches</h1>
     <p>Follow tournament matches, results and winning teams.</p>
   </div>
 
-  <div class="match-list">
-    <article class="match-card" *ngFor="let match of matches">
+  <section class="match-section live-section" *ngIf="liveMatches$ | async as liveMatches">
+    <div class="section-heading">
+      <div>
+        <h2 class="section-title">Live Matches</h2>
+        <p class="section-subtitle">Matches happening right now.</p>
+      </div>
+      <span class="section-count">{{ liveMatches.length }}</span>
+    </div>
+    <div class="match-list" *ngIf="liveMatches.length; else noLiveMatches">
+      <ng-container
+        *ngFor="let match of liveMatches"
+        [ngTemplateOutlet]="matchCard"
+        [ngTemplateOutletContext]="{ $implicit: match }"
+      ></ng-container>
+    </div>
+    <ng-template #noLiveMatches>
+      <p class="empty-section">No live matches right now.</p>
+    </ng-template>
+  </section>
+
+  <section class="match-section upcoming-section" *ngIf="upcomingMatches$ | async as upcomingMatches">
+    <div class="section-heading">
+      <div>
+        <h2 class="section-title">Upcoming Matches</h2>
+        <p class="section-subtitle">Scheduled matches, starting soonest first.</p>
+      </div>
+      <span class="section-count">{{ upcomingMatches.length }}</span>
+    </div>
+    <div class="match-list" *ngIf="upcomingMatches.length; else noUpcomingMatches">
+      <ng-container
+        *ngFor="let match of upcomingMatches"
+        [ngTemplateOutlet]="matchCard"
+        [ngTemplateOutletContext]="{ $implicit: match }"
+      ></ng-container>
+    </div>
+    <ng-template #noUpcomingMatches>
+      <p class="empty-section">No upcoming matches scheduled.</p>
+    </ng-template>
+  </section>
+
+  <section class="match-section finished-section" *ngIf="finishedMatches$ | async as finishedMatches">
+    <div class="section-heading">
+      <div>
+        <h2 class="section-title">Finished Matches</h2>
+        <p class="section-subtitle">Latest completed matches and results.</p>
+      </div>
+      <span class="section-count">{{ finishedMatches.length }}</span>
+    </div>
+    <div class="match-list" *ngIf="finishedMatches.length; else noFinishedMatches">
+      <ng-container
+        *ngFor="let match of finishedMatches"
+        [ngTemplateOutlet]="matchCard"
+        [ngTemplateOutletContext]="{ $implicit: match }"
+      ></ng-container>
+    </div>
+    <ng-template #noFinishedMatches>
+      <p class="empty-section">No finished matches yet.</p>
+    </ng-template>
+  </section>
+
+  <section class="match-section cancelled-section" *ngIf="cancelledMatches$ | async as cancelledMatches">
+    <div class="section-heading">
+      <div>
+        <h2 class="section-title">Cancelled Matches</h2>
+        <p class="section-subtitle">Matches that will no longer be played.</p>
+      </div>
+      <span class="section-count">{{ cancelledMatches.length }}</span>
+    </div>
+    <div class="match-list" *ngIf="cancelledMatches.length; else noCancelledMatches">
+      <ng-container
+        *ngFor="let match of cancelledMatches"
+        [ngTemplateOutlet]="matchCard"
+        [ngTemplateOutletContext]="{ $implicit: match }"
+      ></ng-container>
+    </div>
+    <ng-template #noCancelledMatches>
+      <p class="empty-section">No cancelled matches.</p>
+    </ng-template>
+  </section>
+
+  <ng-template #matchCard let-match>
+    <article class="match-card">
       <div class="match-top">
         <div>
           <span class="tournament-name">
@@ -59,7 +139,5 @@
         <div class="pending">Result pending</div>
       </ng-template>
     </article>
-  </div>
-
-  <p class="empty-message" *ngIf="matches.length === 0">No matches are currently available.</p>
+  </ng-template>
 </section>

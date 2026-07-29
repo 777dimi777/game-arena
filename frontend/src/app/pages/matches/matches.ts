@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 
 import { Match } from '../../models/match';
 import { MatchService } from '../../services/match';
@@ -12,6 +12,10 @@ import { MatchService } from '../../services/match';
 })
 export class Matches {
   matches$: Observable<Match[]>;
+  liveMatches$: Observable<Match[]>;
+  upcomingMatches$: Observable<Match[]>;
+  finishedMatches$: Observable<Match[]>;
+  cancelledMatches$: Observable<Match[]>;
 
   constructor(private readonly matchService: MatchService) {
     this.matches$ = this.matchService.getAll().pipe(
@@ -20,7 +24,44 @@ export class Matches {
         refCount: true,
       }),
     );
+
+    this.liveMatches$ = this.matches$.pipe(
+      map((matches) =>
+        matches.filter((match) => this.getDisplayStatus(match) === 'LIVE'),
+      ),
+    );
+
+    this.upcomingMatches$ = this.matches$.pipe(
+      map((matches) =>
+        matches
+          .filter((match) => this.getDisplayStatus(match) === 'SCHEDULED')
+          .sort(
+            (a, b) =>
+              this.getScheduledTime(a, Number.POSITIVE_INFINITY) -
+              this.getScheduledTime(b, Number.POSITIVE_INFINITY),
+          ),
+      ),
+    );
+
+    this.finishedMatches$ = this.matches$.pipe(
+      map((matches) =>
+        matches
+          .filter((match) => this.getDisplayStatus(match) === 'FINISHED')
+          .sort(
+            (a, b) =>
+              this.getScheduledTime(b, Number.NEGATIVE_INFINITY) -
+              this.getScheduledTime(a, Number.NEGATIVE_INFINITY),
+          ),
+      ),
+    );
+
+    this.cancelledMatches$ = this.matches$.pipe(
+      map((matches) =>
+        matches.filter((match) => this.getDisplayStatus(match) === 'CANCELLED'),
+      ),
+    );
   }
+
   getDisplayStatus(match: Match): string {
     const hasResult =
       match.scoreA !== null &&
@@ -34,5 +75,14 @@ export class Matches {
     }
 
     return match.status;
+  }
+
+  private getScheduledTime(match: Match, fallback: number): number {
+    if (!match.scheduledAt) {
+      return fallback;
+    }
+
+    const scheduledTime = new Date(match.scheduledAt).getTime();
+    return Number.isNaN(scheduledTime) ? fallback : scheduledTime;
   }
 }
