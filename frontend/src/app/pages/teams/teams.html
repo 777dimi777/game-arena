@@ -19,6 +19,8 @@
       <p>
         {{ team.description || 'This team has no description yet.' }}
       </p>
+
+      <a class="profile-link" [routerLink]="['/teams', team.id]">View Profile</a>
     </article>
   </div>
 

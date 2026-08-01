@@ -109,3 +109,21 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.profile-link {
+  display: inline-flex;
+  margin-top: 6px;
+  padding: 10px 15px;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  border-radius: 11px;
+  background: rgba(124, 58, 237, 0.12);
+  color: #ddd6fe;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.profile-link:hover {
+  border-color: #8b5cf6;
+  background: rgba(124, 58, 237, 0.24);
+  transform: translateY(-1px);
+}

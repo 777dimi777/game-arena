@@ -1,0 +1,60 @@
+﻿<section class="page" *ngIf="profile$ | async as profile">
+  <a routerLink="/teams" class="back-link">&larr; Back to Teams</a>
+
+  <div class="team-hero">
+    <div class="team-tag-avatar">{{ profile.team.tag }}</div>
+    <div>
+      <p class="eyebrow">Team profile</p>
+      <h1>{{ profile.team.name }}</h1>
+      <span class="team-tag">#{{ profile.team.tag }}</span>
+      <p class="team-description">
+        {{ profile.team.description || 'This team has no description yet.' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <article class="stat-card"><span>Played Matches</span><strong>{{ profile.playedMatches }}</strong></article>
+    <article class="stat-card wins-stat"><span>Wins</span><strong>{{ profile.wins }}</strong></article>
+    <article class="stat-card losses-stat"><span>Losses</span><strong>{{ profile.losses }}</strong></article>
+    <article class="stat-card rate-stat"><span>Win Rate</span><strong>{{ profile.winRate }}%</strong></article>
+  </div>
+
+  <section class="profile-section">
+    <div class="section-heading">
+      <div><p class="eyebrow">Achievements</p><h2>Team Badges</h2></div>
+      <span class="section-count">{{ profile.badges.length }}</span>
+    </div>
+    <div class="badges" *ngIf="profile.badges.length; else noBadges">
+      <div class="badge-card" *ngFor="let badge of profile.badges">{{ badge }}</div>
+    </div>
+    <ng-template #noBadges><p class="empty-section">No badges yet.</p></ng-template>
+  </section>
+
+  <section class="profile-section">
+    <div class="section-heading">
+      <div><p class="eyebrow">Performance</p><h2>Match History</h2></div>
+      <span class="section-count">{{ profile.matches.length }}</span>
+    </div>
+    <div class="history-list" *ngIf="profile.matches.length; else noMatches">
+      <article class="history-card" *ngFor="let match of profile.matches" [ngClass]="getResultClass(match, profile.team.id)">
+        <div class="history-main">
+          <div>
+            <span class="tournament-name">{{ match.tournament.name }}</span>
+            <h3>vs {{ getOpponentName(match, profile.team.id) }}</h3>
+            <p class="match-date" *ngIf="match.scheduledAt">{{ match.scheduledAt | date: 'medium' }}</p>
+          </div>
+          <strong class="match-result">{{ getMatchResult(match) }}</strong>
+        </div>
+        <div class="history-meta">
+          <span class="match-status" [ngClass]="getDisplayStatus(match)">{{ getDisplayStatus(match) }}</span>
+          <span class="winner-label" *ngIf="match.winner; else pendingWinner">
+            Winner: <strong>{{ match.winner.name }}</strong>
+          </span>
+          <ng-template #pendingWinner><span class="winner-label">Result pending</span></ng-template>
+        </div>
+      </article>
+    </div>
+    <ng-template #noMatches><p class="empty-section">No match history available.</p></ng-template>
+  </section>
+</section>

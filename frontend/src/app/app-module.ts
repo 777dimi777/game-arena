@@ -28,6 +28,7 @@ import { Matches } from './pages/matches/matches';
 import { Profile } from './pages/profile/profile';
 import { Register } from './pages/register/register';
 import { Teams } from './pages/teams/teams';
+import { TeamDetails } from './pages/team-details/team-details';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Tournaments } from './pages/tournaments/tournaments';
 import { tournamentFeatureKey, tournamentReducer } from './store/tournament/tournament.reducer';
@@ -40,6 +41,7 @@ import { TournamentEffects } from './store/tournament/tournament.effects';
     TournamentCard,
     TournamentDetails,
     Teams,
+    TeamDetails,
     Games,
     Login,
     Register,
