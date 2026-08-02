@@ -26,7 +26,11 @@ export class MatchService {
   create(data: CreateMatchData): Observable<Match> {
     return this.http.post<Match>(this.apiUrl, data);
   }
-
+getByTournament(tournamentId: number): Observable<Match[]> {
+  return this.http.get<Match[]>(
+    `${this.apiUrl}/tournament/${tournamentId}`,
+  );
+}
   updateResult(
     id: number,
     scoreA: number,

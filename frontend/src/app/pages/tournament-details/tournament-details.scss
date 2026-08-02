@@ -287,3 +287,213 @@ h1 {
     display: none;
   }
 }
+.tournament-history-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 34%),
+    rgba(15, 23, 42, 0.72);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-heading h2 {
+  margin: 0.25rem 0;
+  color: #f8fafc;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+}
+
+.section-heading p {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.section-count {
+  flex: 0 0 auto;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  color: #67e8f9;
+  background: rgba(8, 47, 73, 0.45);
+  font-weight: 800;
+}
+
+.history-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.history-card {
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 1.25rem;
+  background: rgba(2, 6, 23, 0.46);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.history-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, 0.32);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2);
+}
+
+.history-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.match-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.match-status.SCHEDULED {
+  background: rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.match-status.LIVE {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.2);
+}
+
+.match-status.FINISHED {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.45);
+}
+
+.match-status.CANCELLED {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fde68a;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+}
+
+.match-date {
+  margin: 0.45rem 0 0;
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.game-badge {
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  color: #93c5fd;
+  background: rgba(37, 99, 235, 0.2);
+  font-weight: 800;
+}
+
+.history-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.history-team {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.history-team.right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.history-team strong {
+  color: #f8fafc;
+}
+
+.team-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: 0.4rem;
+  border-radius: 0.85rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  font-weight: 900;
+}
+
+.history-score {
+  min-width: 5rem;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.history-result {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  color: #86efac;
+  background: rgba(22, 101, 52, 0.22);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.history-result.pending {
+  color: #cbd5e1;
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.empty-history {
+  padding: 1rem;
+  border-radius: 1rem;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed rgba(148, 163, 184, 0.22);
+}
+
+@media (max-width: 720px) {
+  .section-heading,
+  .history-top {
+    flex-direction: column;
+  }
+
+  .history-teams {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .history-team,
+  .history-team.right {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .history-score {
+    justify-self: center;
+  }
+}

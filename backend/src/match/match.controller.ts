@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { MatchService } from './match.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
@@ -26,10 +26,13 @@ export class MatchController {
   create(@Body() createMatchDto: CreateMatchDto) {
     return this.matchService.create(createMatchDto);
   }
-
-  @Get()
+    @Get()
   findAll() {
     return this.matchService.findAll();
+  }
+  @Get('tournament/:tournamentId')
+  findByTournament(@Param('tournamentId', ParseIntPipe) tournamentId: number) {
+    return this.matchService.findByTournament(tournamentId);
   }
 
   @Get(':id')

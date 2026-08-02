@@ -1,11 +1,7 @@
 <section class="details-page">
-  <a routerLink="/tournaments" class="back-link">
-    ← Back to tournaments
-  </a>
+  <a routerLink="/tournaments" class="back-link"> ← Back to tournaments </a>
 
-  <p class="loading-message" *ngIf="loading$ | async">
-    Loading tournament details...
-  </p>
+  <p class="loading-message" *ngIf="loading$ | async">Loading tournament details...</p>
 
   <p class="error-message" *ngIf="storeError$ | async as storeError">
     {{ storeError }}
@@ -36,9 +32,7 @@
 
       <div class="stat-card">
         <span>Teams</span>
-        <strong>
-          {{ tournament.teams.length }}/{{ tournament.maxTeams }}
-        </strong>
+        <strong> {{ tournament.teams.length }}/{{ tournament.maxTeams }} </strong>
       </div>
 
       <div class="stat-card">
@@ -55,14 +49,8 @@
     <section class="teams-section">
       <h2>Registered teams</h2>
 
-      <div
-        class="team-list"
-        *ngIf="tournament.teams.length > 0; else noTeams"
-      >
-        <div
-          class="team-card"
-          *ngFor="let team of tournament.teams"
-        >
+      <div class="team-list" *ngIf="tournament.teams.length > 0; else noTeams">
+        <div class="team-card" *ngFor="let team of tournament.teams">
           <strong>{{ team.name }}</strong>
           <span>{{ team.tag }}</span>
           <p>
@@ -72,9 +60,7 @@
       </div>
 
       <ng-template #noTeams>
-        <p class="empty-message">
-          No teams have joined this tournament yet.
-        </p>
+        <p class="empty-message">No teams have joined this tournament yet.</p>
       </ng-template>
     </section>
 
@@ -87,10 +73,7 @@
       </div>
 
       <ng-container *ngIf="leaderboard$ | async as leaderboard">
-        <div
-          class="leaderboard"
-          *ngIf="leaderboard.length > 0; else noLeaderboard"
-        >
+        <div class="leaderboard" *ngIf="leaderboard.length > 0; else noLeaderboard">
           <div class="leaderboard-header">
             <span>Rank</span>
             <span>Team</span>
@@ -98,10 +81,7 @@
             <span>Wins</span>
           </div>
 
-          <div
-            class="leaderboard-row"
-            *ngFor="let item of leaderboard; let i = index"
-          >
+          <div class="leaderboard-row" *ngFor="let item of leaderboard; let i = index">
             <span class="rank">#{{ i + 1 }}</span>
             <strong>{{ item.teamName }}</strong>
             <span>{{ item.tag }}</span>
@@ -110,29 +90,84 @@
         </div>
 
         <ng-template #noLeaderboard>
-          <p class="empty-message">
-            No teams are available for the leaderboard yet.
-          </p>
+          <p class="empty-message">No teams are available for the leaderboard yet.</p>
         </ng-template>
       </ng-container>
     </section>
+    <section class="tournament-history-section" *ngIf="matchHistory$ | async as matches">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Tournament history</p>
+          <h2>Previous matches</h2>
+          <p>
+            Review all matches connected to this tournament, including scheduled, live and completed
+            games.
+          </p>
+        </div>
 
-    <section
-      class="join-card"
-      *ngIf="teams$ | async as teams"
-    >
+        <span class="section-count"> {{ matches.length }} matches </span>
+      </div>
+
+      <div class="history-list" *ngIf="matches.length > 0; else noMatches">
+        <article class="history-card" *ngFor="let match of matches">
+          <div class="history-top">
+            <div>
+              <span class="match-status" [ngClass]="getDisplayStatus(match)">
+                {{ getDisplayStatus(match) }}
+              </span>
+
+              <p class="match-date" *ngIf="match.scheduledAt">
+                {{ match.scheduledAt | date: 'medium' }}
+              </p>
+            </div>
+
+            <span class="game-badge" *ngIf="match.tournament.game">
+              {{ match.tournament.game.name }}
+            </span>
+          </div>
+
+          <div class="history-teams">
+            <div class="history-team">
+              <span class="team-tag">
+                {{ match.teamA.tag }}
+              </span>
+              <strong>{{ match.teamA.name }}</strong>
+            </div>
+
+            <div class="history-score">
+              {{ getMatchResult(match) }}
+            </div>
+
+            <div class="history-team right">
+              <strong>{{ match.teamB.name }}</strong>
+              <span class="team-tag">
+                {{ match.teamB.tag }}
+              </span>
+            </div>
+          </div>
+
+          <div class="history-result" *ngIf="match.winner; else pendingMatch">
+            Winner:
+            <strong>{{ match.winner.name }}</strong>
+          </div>
+
+          <ng-template #pendingMatch>
+            <div class="history-result pending">Result pending</div>
+          </ng-template>
+        </article>
+      </div>
+
+      <ng-template #noMatches>
+        <div class="empty-history">No matches have been created for this tournament yet.</div>
+      </ng-template>
+    </section>
+    <section class="join-card" *ngIf="teams$ | async as teams">
       <h2>Join tournament</h2>
 
       <p>Select a team and register it for this tournament.</p>
 
-      <select
-        [(ngModel)]="selectedTeamId"
-        [disabled]="teams.length === 0"
-      >
-        <option
-          *ngFor="let team of teams"
-          [ngValue]="team.id"
-        >
+      <select [(ngModel)]="selectedTeamId" [disabled]="teams.length === 0">
+        <option *ngFor="let team of teams" [ngValue]="team.id">
           {{ team.name }} ({{ team.tag }})
         </option>
       </select>

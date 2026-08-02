@@ -1,13 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  BehaviorSubject,
-  finalize,
-  Observable,
-  shareReplay,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, finalize, Observable, shareReplay, Subject, switchMap, tap } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 
@@ -24,7 +17,8 @@ import {
   selectTournamentError,
   selectTournamentLoading,
 } from '../../store/tournament/tournament.selectors';
-
+import { Match } from '../../models/match';
+import { MatchService } from '../../services/match';
 @Component({
   selector: 'app-tournament-details',
   standalone: false,
@@ -38,6 +32,7 @@ export class TournamentDetails implements OnInit {
 
   loading$!: Observable<boolean>;
   storeError$!: Observable<string | null>;
+  matchHistory$!: Observable<Match[]>;
 
   tournamentId = 0;
   selectedTeamId = 0;
@@ -50,10 +45,11 @@ export class TournamentDetails implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly store: Store,
     private readonly tournamentService: TournamentService,
     private readonly teamService: TeamService,
+    private readonly matchService: MatchService,
     private readonly authService: AuthService,
-    private readonly store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +76,13 @@ export class TournamentDetails implements OnInit {
         refCount: true,
       }),
     );
-
+    this.matchHistory$ = this.refreshSubject.pipe(
+      switchMap(() => this.matchService.getByTournament(this.tournamentId)),
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
+    );
     this.teams$ = this.teamService.getAll().pipe(
       tap((teams) => {
         if (teams.length > 0 && this.selectedTeamId === 0) {
@@ -141,5 +143,35 @@ export class TournamentDetails implements OnInit {
             : (message ?? 'Failed to join tournament.');
         },
       });
+  }
+  getDisplayStatus(match: Match): string {
+    const hasResult =
+      match.scoreA !== null &&
+      match.scoreA !== undefined &&
+      match.scoreB !== null &&
+      match.scoreB !== undefined &&
+      (match.scoreA > 0 || match.scoreB > 0);
+
+    if (match.winner || hasResult) {
+      return 'FINISHED';
+    }
+
+    return match.status;
+  }
+  getMatchResult(match: Match): string {
+    const hasScores =
+      match.scoreA !== null &&
+      match.scoreA !== undefined &&
+      match.scoreB !== null &&
+      match.scoreB !== undefined;
+
+    if (!hasScores) {
+      return '- : -';
+    }
+
+    return `${match.scoreA} : ${match.scoreB}`;
+  }
+  isFinished(match: Match): boolean {
+    return this.getDisplayStatus(match) === 'FINISHED';
   }
 }
