@@ -112,40 +112,89 @@ export class TournamentService {
 
     return this.tournamentRepository.save(tournament);
   }
-  async getLeaderboard(tournamentId: number) {
-    const tournament = await this.findOne(tournamentId);
+async getLeaderboard(id: number) {
+  const tournament = await this.tournamentRepository.findOne({
+    where: { id },
+    relations: {
+      teams: true,
+    },
+  });
 
-    const leaderboard = tournament.teams.map((team) => {
-      return {
-        teamId: team.id,
-        teamName: team.name,
-        tag: team.tag,
-        wins: 0,
-      };
-    });
-
-    const matches = await this.matchRepository.find({
-      where: {
-        tournament: {
-          id: tournamentId,
-        },
-      },
-    });
-
-    matches.forEach((match) => {
-      if (match.winner) {
-        const item = leaderboard.find((x) => x.teamId === match.winner?.id);
-
-        if (item) {
-          item.wins++;
-        }
-      }
-    });
-
-    leaderboard.sort((a, b) => b.wins - a.wins);
-
-    return leaderboard;
+  if (!tournament) {
+    throw new NotFoundException('Tournament not found');
   }
+
+  const matches = await this.matchRepository.find({
+    where: {
+      tournament: {
+        id,
+      },
+    },
+    relations: {
+      teamA: true,
+      teamB: true,
+      winner: true,
+    },
+  });
+
+  const leaderboard = tournament.teams.map((team) => {
+    const teamMatches = matches.filter(
+      (match) =>
+        match.teamA.id === team.id || match.teamB.id === team.id,
+    );
+
+    const finishedMatches = teamMatches.filter((match) => {
+      const hasResult =
+        match.scoreA !== null &&
+        match.scoreA !== undefined &&
+        match.scoreB !== null &&
+        match.scoreB !== undefined &&
+        (match.scoreA > 0 || match.scoreB > 0);
+
+      return match.status === 'FINISHED' || !!match.winner || hasResult;
+    });
+
+    const wins = finishedMatches.filter(
+      (match) => match.winner?.id === team.id,
+    ).length;
+
+    const losses = finishedMatches.filter(
+      (match) => match.winner && match.winner.id !== team.id,
+    ).length;
+
+    const playedMatches = finishedMatches.length;
+
+    const winRate =
+      playedMatches > 0
+        ? Math.round((wins / playedMatches) * 100)
+        : 0;
+
+    const points = wins * 3;
+
+    return {
+      teamId: team.id,
+      teamName: team.name,
+      tag: team.tag,
+      playedMatches,
+      wins,
+      losses,
+      winRate,
+      points,
+    };
+  });
+
+  return leaderboard.sort((a, b) => {
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    }
+
+    if (b.winRate !== a.winRate) {
+      return b.winRate - a.winRate;
+    }
+
+    return b.wins - a.wins;
+  });
+}
   async remove(id: number) {
     const tournament = await this.findOne(id);
     return this.tournamentRepository.remove(tournament);

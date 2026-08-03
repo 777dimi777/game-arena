@@ -64,36 +64,81 @@
       </ng-template>
     </section>
 
-    <section class="leaderboard-section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Tournament standings</p>
-          <h2>Leaderboard</h2>
-        </div>
-      </div>
+<section
+  class="leaderboard-section"
+  *ngIf="leaderboard$ | async as leaderboard"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Tournament ranking</p>
+      <h2>Advanced leaderboard</h2>
+      <p>
+        Teams are ranked by points, win rate and total wins.
+      </p>
+    </div>
 
-      <ng-container *ngIf="leaderboard$ | async as leaderboard">
-        <div class="leaderboard" *ngIf="leaderboard.length > 0; else noLeaderboard">
-          <div class="leaderboard-header">
-            <span>Rank</span>
-            <span>Team</span>
-            <span>Tag</span>
-            <span>Wins</span>
-          </div>
+    <span class="section-count">
+      {{ leaderboard.length }} teams
+    </span>
+  </div>
 
-          <div class="leaderboard-row" *ngFor="let item of leaderboard; let i = index">
-            <span class="rank">#{{ i + 1 }}</span>
-            <strong>{{ item.teamName }}</strong>
-            <span>{{ item.tag }}</span>
-            <span class="wins">{{ item.wins }}</span>
-          </div>
-        </div>
+  <div class="leaderboard" *ngIf="leaderboard.length > 0; else noLeaderboard">
+    <div class="leaderboard-header">
+      <span>Rank</span>
+      <span>Team</span>
+      <span>Played</span>
+      <span>Wins</span>
+      <span>Losses</span>
+      <span>Win rate</span>
+      <span>Points</span>
+    </div>
 
-        <ng-template #noLeaderboard>
-          <p class="empty-message">No teams are available for the leaderboard yet.</p>
-        </ng-template>
-      </ng-container>
-    </section>
+    <div
+      class="leaderboard-row"
+      *ngFor="let item of leaderboard; let index = index"
+    >
+      <span class="rank">
+        #{{ index + 1 }}
+      </span>
+
+      <span class="leaderboard-team">
+        <span class="team-tag small">
+          {{ item.tag }}
+        </span>
+
+        <strong>
+          {{ item.teamName }}
+        </strong>
+      </span>
+
+      <span>
+        {{ item.playedMatches }}
+      </span>
+
+      <span class="wins">
+        {{ item.wins }}
+      </span>
+
+      <span class="losses">
+        {{ item.losses }}
+      </span>
+
+      <span class="win-rate">
+        {{ item.winRate }}%
+      </span>
+
+      <span class="points">
+        {{ item.points }}
+      </span>
+    </div>
+  </div>
+
+  <ng-template #noLeaderboard>
+    <p class="empty-message">
+      No teams are currently ranked in this tournament.
+    </p>
+  </ng-template>
+</section>
     <section class="tournament-history-section" *ngIf="matchHistory$ | async as matches">
       <div class="section-heading">
         <div>
