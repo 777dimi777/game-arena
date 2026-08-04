@@ -95,11 +95,43 @@ export class TournamentDetails implements OnInit {
       }),
     );
   }
-
+  getBracketRoundLabel(index: number): string {
+    return `Match ${index + 1}`;
+  }
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
+  getBracketWinnerName(match: Match): string {
+    if (match.winner) {
+      return match.winner.name;
+    }
 
+    if (this.getDisplayStatus(match) === 'FINISHED') {
+      return 'Draw / No winner';
+    }
+
+    return 'Winner pending';
+  }
+  getBracketCardClass(match: Match): string {
+    const status = this.getDisplayStatus(match);
+
+    if (status === 'FINISHED') {
+      return 'finished';
+    }
+
+    if (status === 'LIVE') {
+      return 'live';
+    }
+
+    if (status === 'CANCELLED') {
+      return 'cancelled';
+    }
+
+    return 'scheduled';
+  }
+  isTeamWinner(match: Match, teamId: number): boolean {
+    return match.winner?.id === teamId;
+  }
   joinTournament(): void {
     this.errorMessage = '';
     this.successMessage = '';
