@@ -1,0 +1,146 @@
+<section class="match-details-page" *ngIf="match$ | async as match">
+  <a routerLink="/matches" class="back-link">
+    ← Back to matches
+  </a>
+
+  <div class="match-hero">
+    <div>
+      <p class="eyebrow">
+        {{ getRoomTitle(match) }}
+      </p>
+
+      <h1>
+        {{ match.teamA.name }} vs {{ match.teamB.name }}
+      </h1>
+
+      <p>
+        {{ match.tournament.name }} · {{ match.tournament.game.name }}
+      </p>
+
+      <div class="hero-actions">
+        <a
+          class="secondary-link"
+          [routerLink]="['/tournaments', match.tournament.id]"
+        >
+          View tournament
+        </a>
+      </div>
+    </div>
+
+    <div class="status-panel">
+      <span
+        class="match-status"
+        [ngClass]="getDisplayStatus(match)"
+      >
+        {{ getDisplayStatus(match) }}
+      </span>
+
+      <p *ngIf="match.scheduledAt">
+        {{ match.scheduledAt | date: 'medium' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="scoreboard">
+    <div
+      class="team-panel"
+      [class.winner]="isTeamWinner(match, match.teamA.id)"
+    >
+      <div class="team-tag">
+        {{ match.teamA.tag }}
+      </div>
+
+      <h2>{{ match.teamA.name }}</h2>
+
+      <p>
+        {{ match.teamA.description || 'No team description available.' }}
+      </p>
+
+      <strong class="team-score">
+        {{ match.scoreA }}
+      </strong>
+
+      <a
+        class="team-profile-link"
+        [routerLink]="['/teams', match.teamA.id]"
+      >
+        View team profile
+      </a>
+    </div>
+
+    <div class="versus-panel">
+      <span>VS</span>
+
+      <strong>
+        {{ getMatchResult(match) }}
+      </strong>
+
+      <small>
+        {{ match.tournament.game.genre }}
+      </small>
+    </div>
+
+    <div
+      class="team-panel"
+      [class.winner]="isTeamWinner(match, match.teamB.id)"
+    >
+      <div class="team-tag">
+        {{ match.teamB.tag }}
+      </div>
+
+      <h2>{{ match.teamB.name }}</h2>
+
+      <p>
+        {{ match.teamB.description || 'No team description available.' }}
+      </p>
+
+      <strong class="team-score">
+        {{ match.scoreB }}
+      </strong>
+
+      <a
+        class="team-profile-link"
+        [routerLink]="['/teams', match.teamB.id]"
+      >
+        View team profile
+      </a>
+    </div>
+  </div>
+
+  <section class="match-info-grid">
+    <div class="info-card">
+      <span>Tournament</span>
+      <strong>{{ match.tournament.name }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Game</span>
+      <strong>{{ match.tournament.game.name }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Team size</span>
+      <strong>{{ match.tournament.game.teamSize }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span>Winner</span>
+      <strong>{{ getWinnerText(match) }}</strong>
+    </div>
+  </section>
+
+  <section class="live-room-card">
+    <div>
+      <p class="eyebrow">Match room</p>
+      <h2>Room status</h2>
+      <p>
+        This page gives players and visitors a focused view of a single match,
+        including status, score, teams and winner information.
+      </p>
+    </div>
+
+    <div class="room-state" [ngClass]="getDisplayStatus(match)">
+      {{ getDisplayStatus(match) }}
+    </div>
+  </section>
+</section>

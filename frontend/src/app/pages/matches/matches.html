@@ -25,7 +25,10 @@
     </ng-template>
   </section>
 
-  <section class="match-section upcoming-section" *ngIf="upcomingMatches$ | async as upcomingMatches">
+  <section
+    class="match-section upcoming-section"
+    *ngIf="upcomingMatches$ | async as upcomingMatches"
+  >
     <div class="section-heading">
       <div>
         <h2 class="section-title">Upcoming Matches</h2>
@@ -45,7 +48,10 @@
     </ng-template>
   </section>
 
-  <section class="match-section finished-section" *ngIf="finishedMatches$ | async as finishedMatches">
+  <section
+    class="match-section finished-section"
+    *ngIf="finishedMatches$ | async as finishedMatches"
+  >
     <div class="section-heading">
       <div>
         <h2 class="section-title">Finished Matches</h2>
@@ -65,7 +71,10 @@
     </ng-template>
   </section>
 
-  <section class="match-section cancelled-section" *ngIf="cancelledMatches$ | async as cancelledMatches">
+  <section
+    class="match-section cancelled-section"
+    *ngIf="cancelledMatches$ | async as cancelledMatches"
+  >
     <div class="section-heading">
       <div>
         <h2 class="section-title">Cancelled Matches</h2>
@@ -138,6 +147,7 @@
       <ng-template #pendingResult>
         <div class="pending">Result pending</div>
       </ng-template>
+      <a class="details-link" [routerLink]="['/matches', match.id]"> Open match room </a>
     </article>
   </ng-template>
 </section>

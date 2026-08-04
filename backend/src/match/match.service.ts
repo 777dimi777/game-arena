@@ -71,27 +71,27 @@ export class MatchService {
   findAll() {
     return this.matchRepository.find();
   }
-async findByTournament(tournamentId: number): Promise<Match[]> {
-  const tournament = await this.tournamentRepository.findOne({
-    where: { id: tournamentId },
-  });
+  async findByTournament(tournamentId: number): Promise<Match[]> {
+    const tournament = await this.tournamentRepository.findOne({
+      where: { id: tournamentId },
+    });
 
-  if (!tournament) {
-    throw new NotFoundException('Tournament not found');
-  }
+    if (!tournament) {
+      throw new NotFoundException('Tournament not found');
+    }
 
-  return this.matchRepository.find({
-    where: {
-      tournament: {
-        id: tournamentId,
+    return this.matchRepository.find({
+      where: {
+        tournament: {
+          id: tournamentId,
+        },
       },
-    },
-    order: {
-      scheduledAt: 'DESC',
-      id: 'DESC',
-    },
-  });
-}
+      order: {
+        scheduledAt: 'DESC',
+        id: 'DESC',
+      },
+    });
+  }
   async findOne(id: number) {
     const match = await this.matchRepository.findOne({
       where: { id },

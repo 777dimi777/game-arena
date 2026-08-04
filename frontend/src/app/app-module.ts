@@ -33,7 +33,7 @@ import { TeamDetails } from './pages/team-details/team-details';
 import { Teams } from './pages/teams/teams';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Tournaments } from './pages/tournaments/tournaments';
-
+import { MatchDetails } from './pages/match-details/match-details';
 import { TournamentEffects } from './store/tournament/tournament.effects';
 import {
   tournamentFeatureKey,
@@ -61,6 +61,7 @@ import {
     AdminMatchForm,
     AdminMatchResultForm,
     RecentActivityFeed,
+    MatchDetails,
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,7 @@ import { adminGuard } from './guards/admin-guard';
 import { CreateTeam } from './pages/create-team/create-team';
 import { Matches } from './pages/matches/matches';
 import { TeamDetails } from './pages/team-details/team-details';
+import { MatchDetails } from './pages/match-details/match-details';
 const routes: Routes = [
   {
     path: '',
@@ -67,6 +68,10 @@ const routes: Routes = [
   {
   path: 'matches',
   component: Matches,
+},
+{
+  path: 'matches/:id',
+  component: MatchDetails,
 },
 ];
 
