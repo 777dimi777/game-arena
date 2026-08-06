@@ -424,3 +424,23 @@
     box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
   }
 }
+
+.app-shell { overflow-x: clip; }
+.user-badge { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(56, 189, 248, 0.65);
+  outline-offset: 3px;
+}
+@media (max-width: 620px) {
+  .navbar { padding: 16px 18px; gap: 18px; }
+  .nav-links, .auth-actions { gap: 12px; }
+  .nav-links a, .auth-actions a { font-size: 14px; }
+  .user-badge { max-width: 140px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark, .nav-links a.active::after, .main-content > * { animation: none; }
+}

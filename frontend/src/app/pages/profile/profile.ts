@@ -127,6 +127,7 @@ export class Profile {
   }
 
   private isFinishedMatch(match: Match): boolean {
+    if (match.status === 'CANCELLED') return false;
     const hasResult =
       match.scoreA !== null &&
       match.scoreA !== undefined &&

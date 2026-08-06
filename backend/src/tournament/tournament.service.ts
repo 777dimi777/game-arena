@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Match } from '../match/entities/match.entity';
+import { Match, MatchStatus } from '../match/entities/match.entity';
 import { CreateTournamentDto } from './dto/create-tournament.dto';
 import { UpdateTournamentDto } from './dto/update-tournament.dto';
 import { Tournament } from './entities/tournament.entity';
@@ -151,7 +151,7 @@ async getLeaderboard(id: number) {
         match.scoreB !== undefined &&
         (match.scoreA > 0 || match.scoreB > 0);
 
-      return match.status === 'FINISHED' || !!match.winner || hasResult;
+      return match.status === MatchStatus.FINISHED || !!match.winner || hasResult;
     });
 
     const wins = finishedMatches.filter(

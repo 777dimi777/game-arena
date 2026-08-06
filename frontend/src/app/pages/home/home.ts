@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import {
+  catchError,
   forkJoin,
   map,
   Observable,
+  of,
   shareReplay,
   switchMap,
   take,
@@ -28,6 +30,7 @@ interface HomeStats {
   styleUrl: './home.scss',
 })
 export class Home {
+  errorMessage = '';
   stats$: Observable<HomeStats>;
 
   constructor(
@@ -42,6 +45,10 @@ export class Home {
       teams: this.teamService.getAll(),
       matches: this.matchService.getAll(),
     }).pipe(
+      catchError(() => {
+        this.errorMessage = 'Some platform statistics could not be loaded.';
+        return of({ tournaments: [], games: [], teams: [], matches: [] });
+      }),
       map(({ tournaments, games, teams, matches }) => ({
         tournamentsCount: tournaments.length,
         gamesCount: games.length,

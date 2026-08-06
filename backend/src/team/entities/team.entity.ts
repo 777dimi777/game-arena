@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Team {
@@ -16,4 +18,7 @@ export class Team {
 
   @Column({ nullable: true })
   description?: string;
+
+  @ManyToOne(() => User, { eager: true, nullable: true })
+  owner?: User | null;
 }

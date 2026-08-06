@@ -308,3 +308,6 @@ h1 {
 .details-link:hover {
   background: rgba(14, 116, 144, 0.38);
 }
+.loading-message, .error-message { margin: 24px 0; padding: 17px; border-radius: 14px; text-align: center; font-weight: 800; }
+.loading-message { background: rgba(34, 211, 238, 0.09); color: #67e8f9; }
+.error-message { border: 1px solid rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.1); color: #fca5a5; }

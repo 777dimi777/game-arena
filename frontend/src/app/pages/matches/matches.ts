@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
+import { catchError, finalize, map, Observable, of, shareReplay } from 'rxjs';
 
 import { Match } from '../../models/match';
 import { MatchService } from '../../services/match';
@@ -11,6 +12,8 @@ import { MatchService } from '../../services/match';
   styleUrl: './matches.scss',
 })
 export class Matches {
+  loading = true;
+  errorMessage = '';
   matches$: Observable<Match[]>;
   liveMatches$: Observable<Match[]>;
   upcomingMatches$: Observable<Match[]>;
@@ -19,6 +22,11 @@ export class Matches {
 
   constructor(private readonly matchService: MatchService) {
     this.matches$ = this.matchService.getAll().pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorMessage = error.error?.message ?? 'Failed to load matches.';
+        return of([]);
+      }),
+      finalize(() => { this.loading = false; }),
       shareReplay({
         bufferSize: 1,
         refCount: true,
@@ -63,19 +71,15 @@ export class Matches {
   }
 
   getDisplayStatus(match: Match): string {
-    const hasResult =
-      match.scoreA !== null &&
-      match.scoreA !== undefined &&
-      match.scoreB !== null &&
-      match.scoreB !== undefined &&
-      (match.scoreA > 0 || match.scoreB > 0);
-
-    if (match.winner || hasResult) {
+    if (match.status === 'CANCELLED') return 'CANCELLED';
+    if (match.status === 'FINISHED') return 'FINISHED';
+    if (match.winner || (match.scoreA ?? 0) > 0 || (match.scoreB ?? 0) > 0) {
       return 'FINISHED';
     }
-
     return match.status;
   }
+
+  trackById(_index: number, match: Match): number { return match.id; }
 
   private getScheduledTime(match: Match, fallback: number): number {
     if (!match.scheduledAt) {

@@ -1,30 +1,17 @@
 <section class="page">
-  <div class="page-header">
-    <p class="eyebrow">Registered teams</p>
-    <h1>Meet the competitors</h1>
-    <p>Discover teams participating in GameArena tournaments.</p>
-  </div>
-  <a routerLink="/create-team" class="create-team-button"> Create team </a>
-
-  <div class="team-grid">
-    <article class="team-card" *ngFor="let team of teams$ | async">
-      <div class="team-logo">
-        {{ team.tag }}
-      </div>
-
-      <h2>{{ team.name }}</h2>
-
-      <span class="tag">#{{ team.tag }}</span>
-
-      <p>
-        {{ team.description || 'This team has no description yet.' }}
-      </p>
-
-      <a class="profile-link" [routerLink]="['/teams', team.id]">View Profile</a>
-    </article>
-  </div>
-
-  <p class="empty-message" *ngIf="(teams$ | async)?.length === 0">
-    No teams are currently available.
-  </p>
+  <div class="page-header"><p class="eyebrow">Registered teams</p><h1>Meet the competitors</h1><p>Discover teams participating in GameArena tournaments.</p></div>
+  <a routerLink="/create-team" class="create-team-button">Create team</a>
+  <p class="loading-message" *ngIf="loading">Loading teams...</p>
+  <p class="error-message" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+  <ng-container *ngIf="teams$ | async as teams">
+    <div class="team-grid" *ngIf="teams.length; else noTeams">
+      <article class="team-card" *ngFor="let team of teams; trackBy: trackById">
+        <div class="team-logo">{{ team.tag }}</div>
+        <h2>{{ team.name }}</h2><span class="tag">#{{ team.tag }}</span>
+        <p>{{ team.description || 'This team has no description yet.' }}</p>
+        <a class="profile-link" [routerLink]="['/teams', team.id]">View Profile</a>
+      </article>
+    </div>
+    <ng-template #noTeams><p class="empty-message" *ngIf="!loading && !errorMessage">No teams are currently available.</p></ng-template>
+  </ng-container>
 </section>

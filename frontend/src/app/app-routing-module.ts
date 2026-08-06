@@ -15,6 +15,7 @@ import { CreateTeam } from './pages/create-team/create-team';
 import { Matches } from './pages/matches/matches';
 import { TeamDetails } from './pages/team-details/team-details';
 import { MatchDetails } from './pages/match-details/match-details';
+import { NotFound } from './pages/not-found/not-found';
 const routes: Routes = [
   {
     path: '',
@@ -73,6 +74,10 @@ const routes: Routes = [
   path: 'matches/:id',
   component: MatchDetails,
 },
+  {
+    path: '**',
+    component: NotFound,
+  },
 ];
 
 @NgModule({

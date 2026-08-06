@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, finalize, Observable, shareReplay, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, finalize, Observable, shareReplay, switchMap, tap } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 
@@ -26,6 +27,7 @@ import { MatchService } from '../../services/match';
   styleUrl: './tournament-details.scss',
 })
 export class TournamentDetails implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   tournament$!: Observable<Tournament | null>;
   leaderboard$!: Observable<LeaderboardItem[]>;
   teams$!: Observable<Team[]>;
@@ -57,7 +59,7 @@ export class TournamentDetails implements OnInit {
     this.loading$ = this.store.select(selectTournamentLoading);
     this.storeError$ = this.store.select(selectTournamentError);
 
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.tournamentId = Number(params.get('id'));
 
       this.store.dispatch(
@@ -177,17 +179,11 @@ export class TournamentDetails implements OnInit {
       });
   }
   getDisplayStatus(match: Match): string {
-    const hasResult =
-      match.scoreA !== null &&
-      match.scoreA !== undefined &&
-      match.scoreB !== null &&
-      match.scoreB !== undefined &&
-      (match.scoreA > 0 || match.scoreB > 0);
-
-    if (match.winner || hasResult) {
+    if (match.status === 'CANCELLED') return 'CANCELLED';
+    if (match.status === 'FINISHED') return 'FINISHED';
+    if (match.winner || (match.scoreA ?? 0) > 0 || (match.scoreB ?? 0) > 0) {
       return 'FINISHED';
     }
-
     return match.status;
   }
   getMatchResult(match: Match): string {

@@ -55,6 +55,8 @@
       </option>
     </select>
 
+    <p class="error-message" *ngIf="gamesError">{{ gamesError }}</p>
+
     <p class="error-message" *ngIf="error$ | async as error">
       {{ error }}
     </p>
@@ -63,7 +65,7 @@
       {{ successMessage }}
     </p>
 
-    <button type="submit" [disabled]="(loading$ | async) || games.length === 0">
+    <button type="submit" [disabled]="(loading$ | async) || gamesLoading || games.length === 0">
       {{ (loading$ | async) ? 'Creating...' : 'Create tournament' }}
     </button>
   </form>

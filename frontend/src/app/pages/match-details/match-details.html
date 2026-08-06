@@ -1,7 +1,9 @@
-<section class="match-details-page" *ngIf="match$ | async as match">
-  <a routerLink="/matches" class="back-link">
-    ← Back to matches
-  </a>
+<section class="match-details-page">
+  <div class="state-card loading-state" *ngIf="loading">Loading match...</div>
+  <div class="state-card error-state" *ngIf="errorMessage" role="alert">{{ errorMessage }}</div>
+
+  <ng-container *ngIf="match$ | async as match">
+  <a routerLink="/matches" class="back-link">&larr; Back to matches</a>
 
   <div class="match-hero">
     <div>
@@ -14,7 +16,7 @@
       </h1>
 
       <p>
-        {{ match.tournament.name }} · {{ match.tournament.game.name }}
+        {{ match.tournament.name }} &middot; {{ match.tournament.game.name }}
       </p>
 
       <div class="hero-actions">
@@ -143,4 +145,5 @@
       {{ getDisplayStatus(match) }}
     </div>
   </section>
+  </ng-container>
 </section>

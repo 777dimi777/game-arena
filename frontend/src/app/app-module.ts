@@ -34,6 +34,7 @@ import { Teams } from './pages/teams/teams';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { Tournaments } from './pages/tournaments/tournaments';
 import { MatchDetails } from './pages/match-details/match-details';
+import { NotFound } from './pages/not-found/not-found';
 import { TournamentEffects } from './store/tournament/tournament.effects';
 import {
   tournamentFeatureKey,
@@ -62,6 +63,7 @@ import {
     AdminMatchResultForm,
     RecentActivityFeed,
     MatchDetails,
+    NotFound,
   ],
   imports: [
     BrowserModule,

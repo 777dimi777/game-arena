@@ -1,5 +1,5 @@
 <section class="details-page">
-  <a routerLink="/tournaments" class="back-link"> ← Back to tournaments </a>
+  <a routerLink="/tournaments" class="back-link"> &larr; Back to tournaments </a>
 
   <p class="loading-message" *ngIf="loading$ | async">Loading tournament details...</p>
 
@@ -27,7 +27,7 @@
     <div class="stats-grid">
       <div class="stat-card">
         <span>Prize pool</span>
-        <strong>{{ tournament.prizePool }}€</strong>
+        <strong>{{ tournament.prizePool }}&euro;</strong>
       </div>
 
       <div class="stat-card">
@@ -37,7 +37,7 @@
 
       <div class="stat-card">
         <span>Start date</span>
-        <strong>{{ tournament.startDate }}</strong>
+        <strong>{{ tournament.startDate | date: 'mediumDate' }}</strong>
       </div>
 
       <div class="stat-card">

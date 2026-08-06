@@ -1,4 +1,6 @@
 <section class="activity-feed" *ngIf="activities$ | async as activities">
+  <p class="activity-state loading" *ngIf="loading">Loading recent activity...</p>
+  <p class="activity-state error" *ngIf="errorMessage" role="status">{{ errorMessage }}</p>
   <div class="activity-header">
     <div>
       <p class="eyebrow">Live platform pulse</p>
@@ -16,7 +18,7 @@
   <div class="activity-list" *ngIf="activities.length > 0; else noActivity">
     <a
       class="activity-item"
-      *ngFor="let activity of activities"
+      *ngFor="let activity of activities; trackBy: trackById"
       [routerLink]="activity.link"
       [ngClass]="activity.type"
     >

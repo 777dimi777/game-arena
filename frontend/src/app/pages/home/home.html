@@ -47,6 +47,8 @@
       <p class="section-description">Quick insight into the current state of the platform.</p>
     </div>
 
+    <p class="loading-message" *ngIf="errorMessage" role="status">{{ errorMessage }}</p>
+
     <ng-container *ngIf="stats$ | async as stats; else loadingStats">
       <div class="stats-grid">
         <div class="stat-card">

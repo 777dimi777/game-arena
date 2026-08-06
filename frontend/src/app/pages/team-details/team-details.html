@@ -1,4 +1,8 @@
-﻿<section class="page" *ngIf="profile$ | async as profile">
+<section class="page">
+  <div class="page-state loading-state" *ngIf="loading">Loading team profile...</div>
+  <div class="page-state error-state" *ngIf="errorMessage" role="alert">{{ errorMessage }}</div>
+
+  <ng-container *ngIf="profile$ | async as profile">
   <a routerLink="/teams" class="back-link">&larr; Back to Teams</a>
 
   <div class="team-hero">
@@ -57,4 +61,5 @@
     </div>
     <ng-template #noMatches><p class="empty-section">No match history available.</p></ng-template>
   </section>
+  </ng-container>
 </section>

@@ -1,8 +1,9 @@
-﻿import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Match, MatchStatus } from '../match/entities/match.entity';
+import { User } from '../user/entities/user.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { Team } from './entities/team.entity';
@@ -14,10 +15,18 @@ export class TeamService {
     private readonly teamRepository: Repository<Team>,
     @InjectRepository(Match)
     private readonly matchRepository: Repository<Match>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  create(createTeamDto: CreateTeamDto) {
-    const team = this.teamRepository.create(createTeamDto);
+  async create(createTeamDto: CreateTeamDto, ownerId: number) {
+    const owner = await this.userRepository.findOne({ where: { id: ownerId } });
+
+    if (!owner) {
+      throw new NotFoundException('User not found');
+    }
+
+    const team = this.teamRepository.create({ ...createTeamDto, owner });
     return this.teamRepository.save(team);
   }
 
@@ -49,13 +58,16 @@ export class TeamService {
       .addOrderBy('match.id', 'DESC')
       .getMany();
 
-    const playedMatches = matches.filter((match) =>
-      match.status === MatchStatus.FINISHED ||
-      Boolean(match.winner) ||
-      match.scoreA > 0 ||
-      match.scoreB > 0,
+    const playedMatches = matches.filter(
+      (match) =>
+        match.status === MatchStatus.FINISHED ||
+        Boolean(match.winner) ||
+        match.scoreA > 0 ||
+        match.scoreB > 0,
     );
-    const wins = playedMatches.filter((match) => match.winner?.id === team.id).length;
+    const wins = playedMatches.filter(
+      (match) => match.winner?.id === team.id,
+    ).length;
     const losses = playedMatches.filter(
       (match) => Boolean(match.winner) && match.winner?.id !== team.id,
     ).length;

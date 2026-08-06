@@ -1,4 +1,4 @@
-﻿import {
+import {
   Body,
   Controller,
   Delete,
@@ -7,19 +7,32 @@
   ParseIntPipe,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { TeamService } from './team.service';
 
+interface AuthenticatedRequest {
+  user: {
+    userId: number;
+  };
+}
+
 @Controller('team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() createTeamDto: CreateTeamDto) {
-    return this.teamService.create(createTeamDto);
+  create(
+    @Body() createTeamDto: CreateTeamDto,
+    @Req() request: AuthenticatedRequest,
+  ) {
+    return this.teamService.create(createTeamDto, request.user.userId);
   }
 
   @Get()

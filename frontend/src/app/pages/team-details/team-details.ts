@@ -1,6 +1,7 @@
-﻿import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable, shareReplay, switchMap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, shareReplay, switchMap } from 'rxjs';
 
 import { Match } from '../../models/match';
 import { TeamProfile } from '../../models/team-profile';
@@ -13,7 +14,9 @@ import { TeamService } from '../../services/team';
   styleUrl: './team-details.scss',
 })
 export class TeamDetails {
-  profile$: Observable<TeamProfile>;
+  loading = true;
+  errorMessage = '';
+  profile$: Observable<TeamProfile | null>;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -21,16 +24,38 @@ export class TeamDetails {
   ) {
     this.profile$ = this.route.paramMap.pipe(
       map((params) => Number(params.get('id'))),
-      switchMap((id) => this.teamService.getProfile(id)),
+      switchMap((id) => {
+        this.loading = true;
+        this.errorMessage = '';
+
+        if (!Number.isInteger(id) || id <= 0) {
+          this.loading = false;
+          this.errorMessage = 'Invalid team ID.';
+          return of(null);
+        }
+
+        return this.teamService.getProfile(id).pipe(
+          catchError((error: HttpErrorResponse) => {
+            const message = error.error?.message;
+            this.errorMessage = Array.isArray(message)
+              ? message.join(', ')
+              : (message ?? 'Failed to load team profile.');
+            return of(null);
+          }),
+          finalize(() => {
+            this.loading = false;
+          }),
+        );
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
   getMatchResult(match: Match): string {
-    const hasScores =
-      match.scoreA !== null && match.scoreA !== undefined &&
-      match.scoreB !== null && match.scoreB !== undefined;
-    return hasScores ? `${match.scoreA} : ${match.scoreB}` : '- : -';
+    return match.scoreA !== null && match.scoreA !== undefined &&
+      match.scoreB !== null && match.scoreB !== undefined
+      ? `${match.scoreA} : ${match.scoreB}`
+      : '- : -';
   }
 
   getOpponentName(match: Match, teamId: number): string {
@@ -47,9 +72,11 @@ export class TeamDetails {
   }
 
   getDisplayStatus(match: Match): string {
-    const hasResult = match.scoreA !== null && match.scoreA !== undefined &&
-      match.scoreB !== null && match.scoreB !== undefined &&
-      (match.scoreA > 0 || match.scoreB > 0);
-    return match.winner || hasResult ? 'FINISHED' : match.status;
+    if (match.status === 'CANCELLED') return 'CANCELLED';
+    if (match.status === 'FINISHED') return 'FINISHED';
+    if (match.winner || (match.scoreA ?? 0) > 0 || (match.scoreB ?? 0) > 0) {
+      return 'FINISHED';
+    }
+    return match.status;
   }
 }

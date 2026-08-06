@@ -35,7 +35,7 @@
         [attr.aria-label]="soundEnabled() ? 'Disable sound' : 'Enable sound'"
         [title]="soundEnabled() ? 'Disable sound' : 'Enable sound'"
       >
-        {{ soundEnabled() ? '🔊' : '🔇' }}
+        {{ soundEnabled() ? 'ON' : 'OFF' }}
       </button>
       <ng-container *ngIf="isLoggedIn(); else guestLinks">
         <span class="user-badge">
@@ -141,10 +141,10 @@
       <div class="footer-column">
         <h3>Platform</h3>
 
-        <a routerLink="/profile">My profile</a>
-        <a routerLink="/create-team">Create a team</a>
-        <a routerLink="/login">Sign in</a>
-        <a routerLink="/register">Create account</a>
+        <a routerLink="/profile" *ngIf="isLoggedIn()">My profile</a>
+        <a routerLink="/create-team" *ngIf="isLoggedIn()">Create a team</a>
+        <a routerLink="/login" *ngIf="!isLoggedIn()">Sign in</a>
+        <a routerLink="/register" *ngIf="!isLoggedIn()">Create account</a>
       </div>
 
       <div class="footer-column footer-contact">
@@ -154,12 +154,12 @@
 
         <a href="mailto:support@gamearena.com"> support@gamearena.com </a>
 
-        <span>Niš, Serbia</span>
+        <span>Nis, Serbia</span>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 GameArena. All rights reserved.</p>
+      <p>&copy; 2026 GameArena. All rights reserved.</p>
 
       <div class="legal-links">
         <a href="#">Privacy Policy</a>

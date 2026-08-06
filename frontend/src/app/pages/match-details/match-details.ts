@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable, shareReplay, switchMap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, shareReplay, switchMap } from 'rxjs';
 
 import { Match } from '../../models/match';
 import { MatchService } from '../../services/match';
@@ -12,7 +13,9 @@ import { MatchService } from '../../services/match';
   styleUrl: './match-details.scss',
 })
 export class MatchDetails {
-  match$: Observable<Match>;
+  loading = true;
+  errorMessage = '';
+  match$: Observable<Match | null>;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -20,41 +23,47 @@ export class MatchDetails {
   ) {
     this.match$ = this.route.paramMap.pipe(
       map((params) => Number(params.get('id'))),
-      switchMap((id) => this.matchService.getById(id)),
-      shareReplay({
-        bufferSize: 1,
-        refCount: true,
+      switchMap((id) => {
+        this.loading = true;
+        this.errorMessage = '';
+
+        if (!Number.isInteger(id) || id <= 0) {
+          this.loading = false;
+          this.errorMessage = 'Invalid match ID.';
+          return of(null);
+        }
+
+        return this.matchService.getById(id).pipe(
+          catchError((error: HttpErrorResponse) => {
+            const message = error.error?.message;
+            this.errorMessage = Array.isArray(message)
+              ? message.join(', ')
+              : (message ?? 'Failed to load match.');
+            return of(null);
+          }),
+          finalize(() => {
+            this.loading = false;
+          }),
+        );
       }),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
   getDisplayStatus(match: Match): string {
-    const hasResult =
-      match.scoreA !== null &&
-      match.scoreA !== undefined &&
-      match.scoreB !== null &&
-      match.scoreB !== undefined &&
-      (match.scoreA > 0 || match.scoreB > 0);
-
-    if (match.winner || hasResult) {
+    if (match.status === 'CANCELLED') return 'CANCELLED';
+    if (match.status === 'FINISHED') return 'FINISHED';
+    if (match.winner || (match.scoreA ?? 0) > 0 || (match.scoreB ?? 0) > 0) {
       return 'FINISHED';
     }
-
     return match.status;
   }
 
   getMatchResult(match: Match): string {
-    const hasScores =
-      match.scoreA !== null &&
-      match.scoreA !== undefined &&
-      match.scoreB !== null &&
-      match.scoreB !== undefined;
-
-    if (!hasScores) {
-      return '- : -';
-    }
-
-    return `${match.scoreA} : ${match.scoreB}`;
+    return match.scoreA !== null && match.scoreA !== undefined &&
+      match.scoreB !== null && match.scoreB !== undefined
+      ? `${match.scoreA} : ${match.scoreB}`
+      : '- : -';
   }
 
   isTeamWinner(match: Match, teamId: number): boolean {
@@ -62,32 +71,17 @@ export class MatchDetails {
   }
 
   getWinnerText(match: Match): string {
-    if (match.winner) {
-      return match.winner.name;
-    }
-
-    if (this.getDisplayStatus(match) === 'FINISHED') {
-      return 'Draw / No winner';
-    }
-
-    return 'Winner pending';
+    if (match.winner) return match.winner.name;
+    return this.getDisplayStatus(match) === 'FINISHED'
+      ? 'Draw / No winner'
+      : 'Winner pending';
   }
 
   getRoomTitle(match: Match): string {
     const status = this.getDisplayStatus(match);
-
-    if (status === 'LIVE') {
-      return 'Live match room';
-    }
-
-    if (status === 'FINISHED') {
-      return 'Match summary';
-    }
-
-    if (status === 'CANCELLED') {
-      return 'Cancelled match';
-    }
-
+    if (status === 'LIVE') return 'Live match room';
+    if (status === 'FINISHED') return 'Match summary';
+    if (status === 'CANCELLED') return 'Cancelled match';
     return 'Upcoming match';
   }
 }

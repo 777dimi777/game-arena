@@ -5,6 +5,9 @@
     <p>Follow tournament matches, results and winning teams.</p>
   </div>
 
+  <p class="loading-message" *ngIf="loading">Loading matches...</p>
+  <p class="error-message" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+
   <section class="match-section live-section" *ngIf="liveMatches$ | async as liveMatches">
     <div class="section-heading">
       <div>
@@ -15,7 +18,7 @@
     </div>
     <div class="match-list" *ngIf="liveMatches.length; else noLiveMatches">
       <ng-container
-        *ngFor="let match of liveMatches"
+        *ngFor="let match of liveMatches; trackBy: trackById"
         [ngTemplateOutlet]="matchCard"
         [ngTemplateOutletContext]="{ $implicit: match }"
       ></ng-container>
@@ -38,7 +41,7 @@
     </div>
     <div class="match-list" *ngIf="upcomingMatches.length; else noUpcomingMatches">
       <ng-container
-        *ngFor="let match of upcomingMatches"
+        *ngFor="let match of upcomingMatches; trackBy: trackById"
         [ngTemplateOutlet]="matchCard"
         [ngTemplateOutletContext]="{ $implicit: match }"
       ></ng-container>
@@ -61,7 +64,7 @@
     </div>
     <div class="match-list" *ngIf="finishedMatches.length; else noFinishedMatches">
       <ng-container
-        *ngFor="let match of finishedMatches"
+        *ngFor="let match of finishedMatches; trackBy: trackById"
         [ngTemplateOutlet]="matchCard"
         [ngTemplateOutletContext]="{ $implicit: match }"
       ></ng-container>
@@ -84,7 +87,7 @@
     </div>
     <div class="match-list" *ngIf="cancelledMatches.length; else noCancelledMatches">
       <ng-container
-        *ngFor="let match of cancelledMatches"
+        *ngFor="let match of cancelledMatches; trackBy: trackById"
         [ngTemplateOutlet]="matchCard"
         [ngTemplateOutletContext]="{ $implicit: match }"
       ></ng-container>

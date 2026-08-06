@@ -1,11 +1,19 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+
+interface AuthenticatedRequest {
+  user: {
+    userId: number;
+    email: string;
+    role: string;
+  };
+}
 
 @Controller('auth')
 export class AuthController {
@@ -23,19 +31,14 @@ export class AuthController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  profile(@Req() req: any) {
-    return {
-      message: 'Protected profile route',
-      user: req.user,
-    };
+  profile(@Req() request: AuthenticatedRequest) {
+    return { message: 'Protected profile route', user: request.user };
   }
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Get('admin-test')
-  adminTest(@Req() req: any) {
-    return {
-      message: 'Admin route works',
-      user: req.user,
-    };
+  adminTest(@Req() request: AuthenticatedRequest) {
+    return { message: 'Admin route works', user: request.user };
   }
 }
