@@ -1,91 +1,107 @@
 <section class="profile-page">
-  <div class="profile-card" *ngIf="user; else noUser">
-    <div class="profile-header">
-      <div class="avatar">
-        {{ user.username.charAt(0).toUpperCase() }}
+  <ng-container *ngIf="user; else noUser">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="avatar">{{ user.username.charAt(0).toUpperCase() }}</div>
+        <div>
+          <p class="eyebrow">User profile</p>
+          <h1>{{ user.username }}</h1>
+          <span class="role-badge" [class.admin]="isAdmin()">{{ user.role }}</span>
+        </div>
       </div>
 
-      <div>
-        <p class="eyebrow">User profile</p>
-        <h1>{{ user.username }}</h1>
-        <span class="role-badge" [class.admin]="isAdmin()">
-          {{ user.role }}
-        </span>
+      <div class="info-grid">
+        <div class="info-item"><span>Username</span><strong>{{ user.username }}</strong></div>
+        <div class="info-item"><span>Email</span><strong>{{ user.email }}</strong></div>
+        <div class="info-item"><span>Role</span><strong>{{ user.role }}</strong></div>
+      </div>
+
+      <div class="permissions">
+        <h2>What you can do</h2>
+        <div class="permission-list" *ngIf="!isAdmin()">
+          <div class="permission-item"><strong>Join tournaments</strong><p>Select your team and register for open tournaments.</p></div>
+          <div class="permission-item"><strong>Create teams</strong><p>Create and manage your own gaming team.</p></div>
+          <div class="permission-item"><strong>Follow matches</strong><p>View match schedule, results and winners.</p></div>
+        </div>
+        <div class="permission-list" *ngIf="isAdmin()">
+          <div class="permission-item"><strong>Manage games</strong><p>Create new games and prepare them for tournaments.</p></div>
+          <div class="permission-item"><strong>Manage tournaments</strong><p>Create and delete tournaments through the admin panel.</p></div>
+          <div class="permission-item"><strong>Manage match results</strong><p>Create matches, enter results and update winners.</p></div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <a routerLink="/tournaments" class="primary-btn">Browse tournaments</a>
+        <a routerLink="/admin" class="secondary-btn" *ngIf="isAdmin()">Open admin panel</a>
+        <a routerLink="/create-team" class="secondary-btn" *ngIf="!isAdmin()">Create team</a>
       </div>
     </div>
 
-    <div class="info-grid">
-      <div class="info-item">
-        <span>Username</span>
-        <strong>{{ user.username }}</strong>
-      </div>
+    <div class="profile-dashboard">
+      <section class="dashboard-section" *ngIf="profileStats$ | async as stats">
+        <div class="section-heading">
+          <div><p class="eyebrow">Your arena</p><h2>Profile Overview</h2></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card teams-stat"><span>My teams</span><strong>{{ stats.teamsCount }}</strong></article>
+          <article class="stat-card tournaments-stat"><span>My tournaments</span><strong>{{ stats.tournamentsCount }}</strong></article>
+          <article class="stat-card matches-stat"><span>Finished matches</span><strong>{{ stats.finishedMatchesCount }}</strong></article>
+          <article class="stat-card wins-stat"><span>Wins</span><strong>{{ stats.winsCount }}</strong></article>
+        </div>
+      </section>
 
-      <div class="info-item">
-        <span>Email</span>
-        <strong>{{ user.email }}</strong>
-      </div>
+      <section class="dashboard-section" *ngIf="myTeams$ | async as myTeams">
+        <div class="section-heading">
+          <div><p class="eyebrow">Your roster</p><h2>My Teams</h2></div>
+          <span class="section-count">{{ myTeams.length }}</span>
+        </div>
+        <div class="team-grid" *ngIf="myTeams.length; else noTeams">
+          <article class="team-card" *ngFor="let team of myTeams">
+            <div class="team-card-top">
+              <div class="team-tag-avatar">{{ team.tag }}</div>
+              <span class="team-hash">#{{ team.tag }}</span>
+            </div>
+            <h3>{{ team.name }}</h3>
+            <p>{{ team.description || 'This team has no description yet.' }}</p>
+            <a [routerLink]="['/teams', team.id]" class="card-link">View profile</a>
+          </article>
+        </div>
+        <ng-template #noTeams>
+          <div class="empty-state">
+            <p>No teams created yet.</p>
+            <a routerLink="/create-team" class="card-link" *ngIf="!isAdmin()">Create your first team</a>
+          </div>
+        </ng-template>
+      </section>
 
-      <div class="info-item">
-        <span>Role</span>
-        <strong>{{ user.role }}</strong>
-      </div>
+      <section class="dashboard-section" *ngIf="myTournaments$ | async as myTournaments">
+        <div class="section-heading">
+          <div><p class="eyebrow">Competition</p><h2>My Tournaments</h2></div>
+          <span class="section-count">{{ myTournaments.length }}</span>
+        </div>
+        <div class="tournament-grid" *ngIf="myTournaments.length; else noTournaments">
+          <article class="tournament-card" *ngFor="let tournament of myTournaments">
+            <div class="tournament-top">
+              <span class="game-badge">{{ tournament.game.name }}</span>
+              <span class="status-badge" [ngClass]="tournament.status">{{ tournament.status }}</span>
+            </div>
+            <h3>{{ tournament.name }}</h3>
+            <div class="tournament-meta">
+              <span>Teams <strong>{{ tournament.teams.length }} / {{ tournament.maxTeams }}</strong></span>
+              <span>Starts <strong>{{ tournament.startDate | date: 'mediumDate' }}</strong></span>
+            </div>
+            <a [routerLink]="['/tournaments', tournament.id]" class="card-link">View tournament</a>
+          </article>
+        </div>
+        <ng-template #noTournaments>
+          <div class="empty-state"><p>Your teams are not registered for tournaments yet.</p></div>
+        </ng-template>
+      </section>
     </div>
-
-    <div class="permissions">
-      <h2>What you can do</h2>
-
-      <div class="permission-list" *ngIf="!isAdmin()">
-        <div class="permission-item">
-          <strong>Join tournaments</strong>
-          <p>Select your team and register for open tournaments.</p>
-        </div>
-
-        <div class="permission-item">
-          <strong>Create teams</strong>
-          <p>Create and manage your own gaming team.</p>
-        </div>
-
-        <div class="permission-item">
-          <strong>Follow matches</strong>
-          <p>View match schedule, results and winners.</p>
-        </div>
-      </div>
-
-      <div class="permission-list" *ngIf="isAdmin()">
-        <div class="permission-item">
-          <strong>Manage games</strong>
-          <p>Create new games and prepare them for tournaments.</p>
-        </div>
-
-        <div class="permission-item">
-          <strong>Manage tournaments</strong>
-          <p>Create and delete tournaments through the admin panel.</p>
-        </div>
-
-        <div class="permission-item">
-          <strong>Manage match results</strong>
-          <p>Create matches, enter results and update winners.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="profile-actions">
-      <a routerLink="/tournaments" class="primary-btn">
-        Browse tournaments
-      </a>
-
-      <a routerLink="/admin" class="secondary-btn" *ngIf="isAdmin()">
-        Open admin panel
-      </a>
-
-      <a routerLink="/create-team" class="secondary-btn" *ngIf="!isAdmin()">
-        Create team
-      </a>
-    </div>
-  </div>
+  </ng-container>
 
   <ng-template #noUser>
-    <div class="profile-card">
+    <div class="profile-card no-user-card">
       <h1>No user data found</h1>
       <p>Please log in again.</p>
       <a routerLink="/login" class="primary-btn">Go to login</a>
