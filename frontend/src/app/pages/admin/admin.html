@@ -48,24 +48,49 @@
     </ng-container>
   </section>
 
-  <div class="admin-content">
-    <app-admin-game-form
-      (gameCreated)="onGameCreated($event)"
-    ></app-admin-game-form>
+  <div class="admin-workspace">
+    <section class="admin-column setup-column">
+      <div class="column-heading">
+        <span class="column-index">01</span>
+        <div>
+          <p class="column-eyebrow">Competition setup</p>
+          <h2>Games & tournaments</h2>
+          <p>Create the building blocks for upcoming competitions.</p>
+        </div>
+      </div>
 
-    <app-admin-tournament-form
-      (tournamentCreated)="onTournamentCreated($event)"
-    ></app-admin-tournament-form>
+      <div class="column-stack">
+        <app-admin-game-form
+          (gameCreated)="onGameCreated($event)"
+        ></app-admin-game-form>
 
-    <app-admin-match-form
-      (matchCreated)="onMatchCreated($event)"
-    ></app-admin-match-form>
+        <app-admin-tournament-form
+          (tournamentCreated)="onTournamentCreated($event)"
+        ></app-admin-tournament-form>
+      </div>
+    </section>
 
-    <app-admin-match-result-form
-      (resultUpdated)="onResultUpdated($event)"
-    ></app-admin-match-result-form>
+    <section class="admin-column matches-column">
+      <div class="column-heading">
+        <span class="column-index">02</span>
+        <div>
+          <p class="column-eyebrow">Match operations</p>
+          <h2>Matches & results</h2>
+          <p>Schedule matchups and publish completed results.</p>
+        </div>
+      </div>
+
+      <div class="column-stack">
+        <app-admin-match-form
+          (matchCreated)="onMatchCreated($event)"
+        ></app-admin-match-form>
+
+        <app-admin-match-result-form
+          (resultUpdated)="onResultUpdated($event)"
+        ></app-admin-match-result-form>
+      </div>
+    </section>
   </div>
-
   <div class="result-grid">
     <section class="result-card" *ngIf="lastCreatedGame">
       <p class="result-label">Latest created game</p>
