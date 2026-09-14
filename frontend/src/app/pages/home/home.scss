@@ -21,16 +21,32 @@
 }
 
 .hero-logo {
-  width: min(100%, 350px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.45))
-    drop-shadow(0 0 28px rgba(124, 58, 237, 0.28));
-  transition: transform 0.25s ease;
+  width: min(100%, 230px);
+  aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 28px;
+  background: #111827;
+  color: #e0f2fe;
+  text-align: center;
 }
 
-.hero-logo:hover {
-  transform: scale(1.04);
+.hero-logo span {
+  font-family: Arial, sans-serif;
+  font-size: clamp(52px, 7vw, 78px);
+  font-weight: 800;
+  letter-spacing: -6px;
+  line-height: 0.9;
+}
+
+.hero-logo small {
+  color: #7dd3fc;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
 }
 
 .hero-content {

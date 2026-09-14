@@ -1,6 +1,6 @@
 .page {
   min-height: calc(100vh - 70px);
-  padding: 60px 80px;
+  padding: 60px clamp(24px, 5vw, 80px);
   background:
     radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 30%),
     #0f172a;
@@ -32,11 +32,14 @@ h1 {
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 24px;
+  width: min(1400px, 100%);
+  margin-inline: auto;
 }
 
 .team-card {
+  min-width: 0;
   background: #111827;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 22px;
@@ -77,11 +80,7 @@ h1 {
   font-size: 18px;
 }
 
-@media (max-width: 1000px) {
-  .team-grid {
-    grid-template-columns: 1fr;
-  }
-
+@media (max-width: 720px) {
   .page {
     padding: 40px 24px;
   }
@@ -99,15 +98,6 @@ h1 {
 
 .create-team-button:hover {
   background: #6d28d9;
-}
-@media (max-width: 900px) {
-  .page {
-    padding: 40px 24px;
-  }
-
-  .team-grid {
-    grid-template-columns: 1fr;
-  }
 }
 .profile-link {
   display: inline-flex;
