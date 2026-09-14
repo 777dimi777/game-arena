@@ -121,20 +121,16 @@
   max-width: 370px;
 }
 
-.footer-logo-mark {
-  width: 50px;
-  height: 50px;
-  display: inline-grid;
-  place-items: center;
-  justify-content: center;
-  border: 1px solid rgba(56, 189, 248, 0.42);
-  border-radius: 12px;
-  background: #0f172a;
-  color: #7dd3fc;
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: -1px;
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.footer-logo-image {
+  width: 220px;
+  height: auto;
+  display: block;
 }
 
 .footer-brand > p {
@@ -303,20 +299,11 @@
   letter-spacing: 0.4px;
 }
 
-.logo-mark {
-  width: 46px;
-  height: 46px;
-  display: inline-grid;
-  place-items: center;
-  justify-content: center;
-  border: 1px solid rgba(56, 189, 248, 0.52);
-  border-radius: 12px;
-  background: #111827;
-  color: #7dd3fc;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: -1px;
+.logo-image {
+  width: 190px;
+  height: 58px;
+  object-fit: contain;
+  display: block;
 }
 .sound-toggle {
   width: 42px;
@@ -393,6 +380,8 @@ textarea:focus-visible {
 }
 @media (max-width: 620px) {
   .navbar { padding: 16px 18px; gap: 18px; }
+  .logo-image { width: 165px; height: 50px; }
+  .footer-logo-image { width: 190px; }
   .nav-links, .auth-actions { gap: 12px; }
   .nav-links a, .auth-actions a { font-size: 14px; }
   .user-badge { max-width: 140px; }
