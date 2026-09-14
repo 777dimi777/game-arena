@@ -12,7 +12,7 @@ import { JwtStrategy } from './jwt.strategy';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: 'game-arena-secret-key',
+      secret: process.env.JWT_SECRET ?? 'development-only-secret',
       signOptions: {
         expiresIn: '1h',
       },
