@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { Game } from '../game/entities/game.entity';
 import { Team } from '../team/entities/team.entity';
 import { Tournament } from '../tournament/entities/tournament.entity';
 import { Match } from '../match/entities/match.entity';
+import { MatchStatus } from '../match/entities/match.entity';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class SeedService {
@@ -21,9 +24,25 @@ export class SeedService {
 
     @InjectRepository(Match)
     private readonly matchRepository: Repository<Match>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async seed() {
+    const admin = await this.ensureUser(
+      'admin2@test.com',
+      'Admin User',
+      'admin123',
+      'ADMIN',
+    );
+    const user = await this.ensureUser(
+      'jwtuser@test.com',
+      'Regular User',
+      '123456',
+      'USER',
+    );
+
     let valorant = await this.gameRepository.findOne({
       where: { name: 'Valorant' },
     });
@@ -123,6 +142,7 @@ export class SeedService {
         scoreA: 13,
         scoreB: 8,
         winner: balkanWarriors,
+        status: MatchStatus.FINISHED,
       });
     }
 
@@ -137,8 +157,36 @@ export class SeedService {
         balkanWarriors: balkanWarriors.id,
         nisEsports: nisEsports.id,
       },
+      users: {
+        admin: admin.id,
+        regularUser: user.id,
+      },
       tournament: tournament.id,
       match: match.id,
     };
+  }
+
+  private async ensureUser(
+    email: string,
+    username: string,
+    password: string,
+    role: string,
+  ): Promise<User> {
+    const existingUser = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
+
+    if (existingUser) {
+      return existingUser;
+    }
+
+    return this.userRepository.save({
+      email,
+      username,
+      password: await bcrypt.hash(password, 10),
+      role,
+    });
   }
 }
