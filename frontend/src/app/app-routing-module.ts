@@ -67,13 +67,13 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-  path: 'matches',
-  component: Matches,
-},
-{
-  path: 'matches/:id',
-  component: MatchDetails,
-},
+    path: 'matches',
+    component: Matches,
+  },
+  {
+    path: 'matches/:id',
+    component: MatchDetails,
+  },
   {
     path: '**',
     component: NotFound,

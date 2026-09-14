@@ -37,30 +37,50 @@ export class RecentActivityFeed {
 
     this.activities$ = combineLatest([matches$, tournaments$]).pipe(
       map(([matches, tournaments]) => this.buildActivities(matches, tournaments)),
-      finalize(() => { this.loading = false; }),
+      finalize(() => {
+        this.loading = false;
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
-  trackById(_index: number, activity: ActivityItem): string { return activity.id; }
+  trackById(_index: number, activity: ActivityItem): string {
+    return activity.id;
+  }
 
   private buildActivities(matches: Match[], tournaments: Tournament[]): ActivityItem[] {
     return [
       ...matches.map((match) => this.createMatchActivity(match)),
       ...tournaments.map((tournament) => this.createTournamentActivity(tournament)),
-    ].sort((a, b) => this.getTimeValue(b) - this.getTimeValue(a)).slice(0, 8);
+    ]
+      .sort((a, b) => this.getTimeValue(b) - this.getTimeValue(a))
+      .slice(0, 8);
   }
 
   private createMatchActivity(match: Match): ActivityItem {
     const status = this.getDisplayStatus(match);
     return {
       id: `match-${match.id}`,
-      type: status === 'FINISHED' ? 'MATCH_FINISHED' : status === 'LIVE' ? 'MATCH_LIVE' : status === 'CANCELLED' ? 'MATCH_CANCELLED' : 'MATCH_SCHEDULED',
+      type:
+        status === 'FINISHED'
+          ? 'MATCH_FINISHED'
+          : status === 'LIVE'
+            ? 'MATCH_LIVE'
+            : status === 'CANCELLED'
+              ? 'MATCH_CANCELLED'
+              : 'MATCH_SCHEDULED',
       title: this.getMatchTitle(match, status),
       subtitle: `${match.tournament.name} \u2022 ${match.tournament.game.name}`,
       timestamp: match.scheduledAt ?? null,
       statusLabel: status,
-      icon: status === 'FINISHED' ? '\u2605' : status === 'LIVE' ? '\u25CF' : status === 'CANCELLED' ? '!' : '\u25F7',
+      icon:
+        status === 'FINISHED'
+          ? '\u2605'
+          : status === 'LIVE'
+            ? '\u25CF'
+            : status === 'CANCELLED'
+              ? '!'
+              : '\u25F7',
       link: `/matches/${match.id}`,
     };
   }
@@ -69,18 +89,33 @@ export class RecentActivityFeed {
     const status = tournament.status ?? 'OPEN';
     return {
       id: `tournament-${tournament.id}`,
-      type: status === 'FINISHED' ? 'TOURNAMENT_FINISHED' : status === 'ONGOING' ? 'TOURNAMENT_ONGOING' : status === 'CANCELLED' ? 'TOURNAMENT_CANCELLED' : 'TOURNAMENT_OPEN',
+      type:
+        status === 'FINISHED'
+          ? 'TOURNAMENT_FINISHED'
+          : status === 'ONGOING'
+            ? 'TOURNAMENT_ONGOING'
+            : status === 'CANCELLED'
+              ? 'TOURNAMENT_CANCELLED'
+              : 'TOURNAMENT_OPEN',
       title: `${tournament.name} is ${status.toLowerCase()}`,
       subtitle: `${tournament.game.name} \u2022 ${tournament.maxTeams} teams`,
       timestamp: tournament.startDate ?? null,
       statusLabel: status,
-      icon: status === 'FINISHED' ? '\u2691' : status === 'ONGOING' ? '\u26A1' : status === 'CANCELLED' ? '!' : '\u25C6',
+      icon:
+        status === 'FINISHED'
+          ? '\u2691'
+          : status === 'ONGOING'
+            ? '\u26A1'
+            : status === 'CANCELLED'
+              ? '!'
+              : '\u25C6',
       link: `/tournaments/${tournament.id}`,
     };
   }
 
   private getMatchTitle(match: Match, status: string): string {
-    if (status === 'FINISHED' && match.winner) return `${match.winner.name} defeated ${match.winner.id === match.teamA.id ? match.teamB.name : match.teamA.name}`;
+    if (status === 'FINISHED' && match.winner)
+      return `${match.winner.name} defeated ${match.winner.id === match.teamA.id ? match.teamB.name : match.teamA.name}`;
     if (status === 'FINISHED') return `${match.teamA.name} vs ${match.teamB.name} finished`;
     if (status === 'LIVE') return `${match.teamA.name} vs ${match.teamB.name} is live`;
     if (status === 'CANCELLED') return `${match.teamA.name} vs ${match.teamB.name} was cancelled`;
