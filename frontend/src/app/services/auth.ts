@@ -50,7 +50,27 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.getToken() !== null;
+    const token = this.getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = JSON.parse(
+        atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')),
+      ) as { exp?: number };
+
+      if (payload.exp && payload.exp * 1000 <= Date.now()) {
+        this.logout();
+        return false;
+      }
+
+      return true;
+    } catch {
+      this.logout();
+      return false;
+    }
   }
   register(username: string, email: string, password: string): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, {
@@ -66,8 +86,13 @@ export class AuthService {
     return null;
   }
 
-  return JSON.parse(user) as CurrentUser;
-}
+    try {
+      return JSON.parse(user) as CurrentUser;
+    } catch {
+      this.logout();
+      return null;
+    }
+  }
 }
 export interface RegisterResponse {
   message: string;
@@ -78,4 +103,3 @@ export interface RegisterResponse {
     role: string;
   };
 }
-

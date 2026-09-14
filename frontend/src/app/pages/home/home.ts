@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
 import {
   catchError,
+  from,
   forkJoin,
   map,
   Observable,
   of,
+  range,
   shareReplay,
   switchMap,
   take,
+  takeUntil,
   timer,
+  zip,
 } from 'rxjs';
 
+import { ApiStatusService } from '../../services/api-status';
 import { GameService } from '../../services/game';
 import { MatchService } from '../../services/match';
 import { TeamService } from '../../services/team';
@@ -38,27 +43,37 @@ export class Home {
     private readonly gameService: GameService,
     private readonly teamService: TeamService,
     private readonly matchService: MatchService,
+    private readonly apiStatusService: ApiStatusService,
   ) {
     this.stats$ = forkJoin({
       tournaments: this.tournamentService.getAll(),
       games: this.gameService.getAll(),
       teams: this.teamService.getAll(),
       matches: this.matchService.getAll(),
+      apiAvailable: from(this.apiStatusService.check()),
     }).pipe(
       catchError(() => {
         this.errorMessage = 'Some platform statistics could not be loaded.';
-        return of({ tournaments: [], games: [], teams: [], matches: [] });
+        return of({
+          tournaments: [],
+          games: [],
+          teams: [],
+          matches: [],
+          apiAvailable: false,
+        });
       }),
-      map(({ tournaments, games, teams, matches }) => ({
-        tournamentsCount: tournaments.length,
-        gamesCount: games.length,
-        teamsCount: teams.length,
-        matchesCount: matches.length,
-      })),
+      map(({ tournaments, games, teams, matches, apiAvailable }) => {
+        if (!apiAvailable) {
+          this.errorMessage = 'The API is not available.';
+        }
+
+        return this.buildStats([tournaments, games, teams, matches]);
+      }),
       switchMap((targetStats) =>
-        timer(0, 30).pipe(
+        zip(timer(0, 30), range(0, 31)).pipe(
           take(31),
-          map((step) => step / 30),
+          takeUntil(timer(930)),
+          map(([, step]) => step / 30),
           map((progress) => ({
             tournamentsCount: Math.round(
               targetStats.tournamentsCount * progress,
@@ -79,6 +94,28 @@ export class Home {
         bufferSize: 1,
         refCount: true,
       }),
+    );
+  }
+
+  private buildStats(resources: unknown[][]): HomeStats {
+    const keys: (keyof HomeStats)[] = [
+      'tournamentsCount',
+      'gamesCount',
+      'teamsCount',
+      'matchesCount',
+    ];
+    const counts: Partial<HomeStats> = {};
+
+    resources.forEach((resource, index) => {
+      counts[keys[index]] = resource.length;
+    });
+
+    return Object.entries(counts).reduce(
+      (stats, [key, value]) => ({
+        ...stats,
+        [key]: value,
+      }),
+      {} as HomeStats,
     );
   }
 }
