@@ -1,13 +1,14 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { Match } from './match';
+import { MatchService } from './match';
 
-describe('Match', () => {
-  let service: Match;
+describe('MatchService', () => {
+  let service: MatchService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Match);
+    TestBed.configureTestingModule({ providers: [provideHttpClient()] });
+    service = TestBed.inject(MatchService);
   });
 
   it('should be created', () => {
