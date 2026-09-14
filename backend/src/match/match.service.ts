@@ -27,6 +27,7 @@ export class MatchService {
   async create(createMatchDto: CreateMatchDto) {
     const tournament = await this.tournamentRepository.findOne({
       where: { id: createMatchDto.tournamentId },
+      relations: { teams: true },
     });
 
     if (!tournament) {
@@ -51,6 +52,11 @@ export class MatchService {
 
     if (teamA.id === teamB.id) {
       throw new BadRequestException('Team A and Team B cannot be the same');
+    }
+
+    const registeredTeamIds = new Set(tournament.teams.map((team) => team.id));
+    if (!registeredTeamIds.has(teamA.id) || !registeredTeamIds.has(teamB.id)) {
+      throw new BadRequestException('Both teams must be registered for the tournament');
     }
 
     const match = this.matchRepository.create({
@@ -175,10 +181,27 @@ export class MatchService {
       match.scoreB = updateMatchDto.scoreB;
     }
 
+    if (
+      match.winner &&
+      match.winner.id !== match.teamA.id &&
+      match.winner.id !== match.teamB.id
+    ) {
+      throw new BadRequestException('Winner must be one of the teams in the match');
+    }
+
     return this.matchRepository.save(match);
   }
 
   async updateResult(id: number, scoreA: number, scoreB: number) {
+    if (
+      !Number.isInteger(scoreA) ||
+      !Number.isInteger(scoreB) ||
+      scoreA < 0 ||
+      scoreB < 0
+    ) {
+      throw new BadRequestException('Scores must be non-negative integers');
+    }
+
     const match = await this.findOne(id);
 
     match.scoreA = scoreA;
