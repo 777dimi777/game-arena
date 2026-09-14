@@ -19,6 +19,7 @@ import { TeamService } from './team.service';
 interface AuthenticatedRequest {
   user: {
     userId: number;
+    role: string;
   };
 }
 
@@ -46,17 +47,26 @@ export class TeamController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teamService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.teamService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTeamDto: UpdateTeamDto) {
-    return this.teamService.update(+id, updateTeamDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTeamDto: UpdateTeamDto,
+    @Req() request: AuthenticatedRequest,
+  ) {
+    return this.teamService.update(id, updateTeamDto, request.user);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.teamService.remove(+id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: AuthenticatedRequest,
+  ) {
+    return this.teamService.remove(id, request.user);
   }
 }

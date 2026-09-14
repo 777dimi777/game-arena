@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,6 +17,13 @@ import { CreateTournamentDto } from './dto/create-tournament.dto';
 import { UpdateTournamentDto } from './dto/update-tournament.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
+
+interface AuthenticatedRequest {
+  user: {
+    userId: number;
+    role: string;
+  };
+}
 
 @Controller('tournament')
 export class TournamentController {
@@ -33,37 +42,39 @@ export class TournamentController {
   }
 
   @Get(':id/leaderboard')
-  getLeaderboard(@Param('id') id: string) {
-    return this.tournamentService.getLeaderboard(+id);
+  getLeaderboard(@Param('id', ParseIntPipe) id: number) {
+    return this.tournamentService.getLeaderboard(id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tournamentService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.tournamentService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateTournamentDto: UpdateTournamentDto,
   ) {
-    return this.tournamentService.update(+id, updateTournamentDto);
+    return this.tournamentService.update(id, updateTournamentDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post(':tournamentId/join/:teamId')
   addTeam(
-    @Param('tournamentId') tournamentId: string,
-    @Param('teamId') teamId: string,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number,
+    @Param('teamId', ParseIntPipe) teamId: number,
+    @Req() request: AuthenticatedRequest,
   ) {
-    return this.tournamentService.addTeam(+tournamentId, +teamId);
+    return this.tournamentService.addTeam(tournamentId, teamId, request.user);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tournamentService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.tournamentService.remove(id);
   }
 }

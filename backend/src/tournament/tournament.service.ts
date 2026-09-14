@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Match, MatchStatus } from '../match/entities/match.entity';
@@ -89,7 +94,11 @@ export class TournamentService {
     return this.tournamentRepository.save(tournament);
   }
 
-  async addTeam(tournamentId: number, teamId: number) {
+  async addTeam(
+    tournamentId: number,
+    teamId: number,
+    currentUser: { userId: number; role: string },
+  ) {
     const tournament = await this.findOne(tournamentId);
 
     const team = await this.teamRepository.findOne({
@@ -100,19 +109,33 @@ export class TournamentService {
       throw new NotFoundException('Team not found');
     }
 
+    if (team.owner?.id !== currentUser.userId && currentUser.role !== 'ADMIN') {
+      throw new ForbiddenException('Only the team owner or an administrator can register this team');
+    }
+
+    if (tournament.status !== 'OPEN') {
+      throw new BadRequestException('Only open tournaments accept registrations');
+    }
+
     if (!tournament.teams) {
       tournament.teams = [];
     }
 
     const alreadyJoined = tournament.teams.some((t) => t.id === team.id);
 
-    if (!alreadyJoined) {
-      tournament.teams.push(team);
+    if (alreadyJoined) {
+      throw new BadRequestException('Team is already registered for this tournament');
     }
+
+    if (tournament.teams.length >= tournament.maxTeams) {
+      throw new BadRequestException('Tournament has reached its team limit');
+    }
+
+    tournament.teams.push(team);
 
     return this.tournamentRepository.save(tournament);
   }
-async getLeaderboard(id: number) {
+  async getLeaderboard(id: number) {
   const tournament = await this.tournamentRepository.findOne({
     where: { id },
     relations: {
@@ -194,7 +217,7 @@ async getLeaderboard(id: number) {
 
     return b.wins - a.wins;
   });
-}
+  }
   async remove(id: number) {
     const tournament = await this.findOne(id);
     return this.tournamentRepository.remove(tournament);

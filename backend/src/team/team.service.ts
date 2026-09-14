@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -92,14 +96,28 @@ export class TeamService {
     };
   }
 
-  async update(id: number, updateTeamDto: UpdateTeamDto) {
+  async update(
+    id: number,
+    updateTeamDto: UpdateTeamDto,
+    currentUser: { userId: number; role: string },
+  ) {
     const team = await this.findOne(id);
+
+    if (team.owner?.id !== currentUser.userId && currentUser.role !== 'ADMIN') {
+      throw new ForbiddenException('Only the team owner or an administrator can update this team');
+    }
+
     Object.assign(team, updateTeamDto);
     return this.teamRepository.save(team);
   }
 
-  async remove(id: number) {
+  async remove(id: number, currentUser: { userId: number; role: string }) {
     const team = await this.findOne(id);
+
+    if (team.owner?.id !== currentUser.userId && currentUser.role !== 'ADMIN') {
+      throw new ForbiddenException('Only the team owner or an administrator can delete this team');
+    }
+
     return this.teamRepository.remove(team);
   }
 }
