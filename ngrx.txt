@@ -1,0 +1,13 @@
+{
+  tournaments: {
+    ids: [1, 2, 3],
+    entities: {
+      1: { id: 1, name: 'Valorant Masters', ... },
+      2: { id: 2, name: 'CS2 Cup', ... },
+      3: { id: 3, name: 'League Arena', ... }
+    },
+    selectedTournament: null,
+    loading: false,
+    error: null
+  }
+}
